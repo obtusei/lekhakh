@@ -1,0 +1,135 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
+}
+
+generator dbml {
+  provider = "prisma-dbml-generator"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = "mysql://root:bhatta123@localhost:3306/lekhakh_db?schema=public"
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+model User {
+  id              String            @id @default(cuid())
+  name            String
+  email           String            @unique
+  emailVerified   DateTime?
+  isVerifiedUser  Boolean           @default(false)
+  isWriter        Boolean           @default(false)
+  isPublicAccount Boolean           @default(false)
+  dateOfBirth     DateTime?
+  username        String            @unique
+  password        String
+  createdAt       DateTime          @default(now())
+  bio             String?
+  image           String?
+  blogs           Blog[]
+  liked           Like[]
+  commented       Comment[]
+  role            Role              @default(USER)
+  followers       Follows[]         @relation("following")
+  following       Follows[]         @relation("follower")
+  sessions        Session[]
+  saccounts       SessionAccount[]
+  SavedBlog       SavedBlogByUser[]
+}
+
+model Follows {
+  follower    User   @relation("follower", fields: [followerId], references: [id])
+  followerId  String
+  following   User   @relation("following", fields: [followingId], references: [id])
+  followingId String
+
+  @@id([followerId, followingId])
+}
+
+model Blog {
+  id         String            @id @default(cuid())
+  title      String
+  category   Category          @relation(fields: [categoryId], references: [id])
+  content    String?
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @default(now())
+  userId     String
+  user       User              @relation(fields: [userId], references: [id])
+  tag        Tag[]
+  likes      Like[]
+  comments   Comment[]
+  categoryId String
+  viewCount  Int               @default(0)
+  SavedBlog  SavedBlogByUser[]
+
+  @@fulltext([title])
+}
+
+model Tag {
+  id    String @id @default(cuid())
+  name  String
+  blogs Blog[]
+}
+
+model Category {
+  id    String @id @default(cuid())
+  name  String
+  blogs Blog[]
+}
+
+model Like {
+  id     String @id @default(cuid())
+  count  Int
+  blogId String
+  blog   Blog   @relation(fields: [blogId], references: [id])
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+model Comment {
+  id     String  @id @default(cuid())
+  blogId String
+  blog   Blog    @relation(fields: [blogId], references: [id])
+  User   User?   @relation(fields: [userId], references: [id])
+  userId String?
+}
+
+model SavedBlogByUser {
+  id     String @id @default(cuid())
+  blogId String
+  blog   Blog   @relation(fields: [blogId], references: [id])
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String
+  expiresAt DateTime
+  User      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+}
+
+model SessionAccount {
+  id        String   @id @default(cuid())
+  browser   String?
+  os        String?
+  version   String?
+  platform  String?
+  isDesktop Boolean?
+  loginAt   DateTime @default(now())
+  User      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+}
+
+model Newsletter {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+}

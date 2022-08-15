@@ -1,0 +1,10 @@
+{
+  "locales": ["en", "ne","mai"],
+  "defaultLocale": "en",
+  "pages": {
+    "*": ["common"],
+    "/register":["register"],
+    "/login":["register"],
+    "/404":["register"]
+  }
+}

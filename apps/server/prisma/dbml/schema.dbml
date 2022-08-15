@@ -1,0 +1,154 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table User {
+  id String [pk]
+  name String [not null]
+  email String [unique, not null]
+  emailVerified DateTime
+  isVerifiedUser Boolean [not null, default: false]
+  isWriter Boolean [not null, default: false]
+  isPublicAccount Boolean [not null, default: false]
+  dateOfBirth DateTime
+  username String [unique, not null]
+  password String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  bio String
+  image String
+  blogs Blog [not null]
+  liked Like [not null]
+  commented Comment [not null]
+  role Role [not null, default: 'USER']
+  followers Follows [not null]
+  following Follows [not null]
+  sessions Session [not null]
+  saccounts SessionAccount [not null]
+  SavedBlog SavedBlogByUser [not null]
+}
+
+Table Follows {
+  follower User [not null]
+  followerId String [not null]
+  following User [not null]
+  followingId String [not null]
+
+  indexes {
+    (followerId, followingId) [pk]
+  }
+}
+
+Table Blog {
+  id String [pk]
+  title String [not null]
+  category Category [not null]
+  content String
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+  userId String [not null]
+  user User [not null]
+  tag Tag [not null]
+  likes Like [not null]
+  comments Comment [not null]
+  categoryId String [not null]
+  viewCount Int [not null, default: 0]
+  SavedBlog SavedBlogByUser [not null]
+}
+
+Table Tag {
+  id String [pk]
+  name String [not null]
+  blogs Blog [not null]
+}
+
+Table Category {
+  id String [pk]
+  name String [not null]
+  blogs Blog [not null]
+}
+
+Table Like {
+  id String [pk]
+  count Int [not null]
+  blogId String [not null]
+  blog Blog [not null]
+  userId String [not null]
+  user User [not null]
+}
+
+Table Comment {
+  id String [pk]
+  blogId String [not null]
+  blog Blog [not null]
+  User User
+  userId String
+}
+
+Table SavedBlogByUser {
+  id String [pk]
+  blogId String [not null]
+  blog Blog [not null]
+  userId String [not null]
+  user User [not null]
+}
+
+Table Session {
+  id String [pk]
+  sid String [unique, not null]
+  data String [not null]
+  expiresAt DateTime [not null]
+  User User
+  userId String
+}
+
+Table SessionAccount {
+  id String [pk]
+  browser String
+  os String
+  version String
+  platform String
+  isDesktop Boolean
+  loginAt DateTime [default: `now()`, not null]
+  User User
+  userId String
+}
+
+Table Newsletter {
+  id String [pk]
+  email String [unique, not null]
+  createdAt DateTime [default: `now()`, not null]
+}
+
+Table BlogToTag {
+  tagId String [ref: > Tag.id]
+  blogsId String [ref: > Blog.id]
+}
+
+Enum Role {
+  ADMIN
+  USER
+}
+
+Ref: Follows.followerId > User.id
+
+Ref: Follows.followingId > User.id
+
+Ref: Blog.categoryId > Category.id
+
+Ref: Blog.userId > User.id
+
+Ref: Like.blogId > Blog.id
+
+Ref: Like.userId > User.id
+
+Ref: Comment.blogId > Blog.id
+
+Ref: Comment.userId > User.id
+
+Ref: SavedBlogByUser.blogId > Blog.id
+
+Ref: SavedBlogByUser.userId > User.id
+
+Ref: Session.userId > User.id
+
+Ref: SessionAccount.userId > User.id
