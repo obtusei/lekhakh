@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 export * from "@mantine/core";
+export * from "@mantine/hooks"
 export * from "@mantine/spotlight"
 export {NotificationsProvider,showNotification} from "@mantine/notifications"
 export const RichTextEditor =  dynamic(() => import('@mantine/rte'), {
@@ -35,3 +36,5 @@ export * from "./lib/navdata"
 export * from "./components/BlogPost"
 export * from "./components/StateButtons"
 export * from "./components/CustomChip"
+export * from "./components/ShortcutLists"
+export * from "./components/TopAlert"

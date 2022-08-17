@@ -83,3 +83,36 @@ export function GetTags () {
 //     console.log("ERROR")
 //   }
 // }
+
+export function GetSpotlightAction () {
+  const { data,error } = useSWR('/admin/tags')
+  return {
+    tags: data,
+    isLoading: !error && !data,
+    isError: error
+  }
+}
+
+interface SpotlightActionProps{
+  id:string
+  title:string
+  
+}
+
+    // id?: string;
+    // /** Action title, topmost large text, used for default filtering */
+    // title: string;
+    // /** Action description, small text displayed after title, used for default filtering */
+    // description?: string;
+    // /** Action group, used to render group label */
+    // group?: string;
+    // /** Keywords that are used for default filtering, not displayed anywhere, can be a string: "react,router,javascript" or an array: ['react', 'router', 'javascript'] */
+    // keywords?: string | string[];
+    // /** Decorative icon */
+    // icon?: ReactNode;
+    // /** Function that is called when action is triggered */
+    // onTrigger(action: SpotlightAction): void;
+    // /** If the spotlight is closed after clicking on this action */
+    // closeOnTrigger?: boolean;
+    // /** Any other properties that will be consumed by SpotlightProvider */
+    // [key: string]: any;

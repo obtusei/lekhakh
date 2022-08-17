@@ -6,10 +6,12 @@ import blogData from 'ui/lib/blogData'
 import { useRouter } from 'next/router'
 import Layout from '../../components/Layout'
 import useTranslation from 'next-translate/useTranslation'
+import { GetSession } from '../../api/user'
 
 function Discover() {
   const router = useRouter();
   const {t} = useTranslation();
+  const {session} = GetSession()
   return (
     <Layout>
           <Title>{t('common:discover')}</Title>
@@ -18,7 +20,7 @@ function Discover() {
           <ScrollSection title='Local' href="/discover/local" seeMore={t('common:seeMore')}>
             {
               [...Array(10)].map((blog,index) => (
-                <BlogCard {...blogData[0]}/>
+                <BlogCard props={blogData[0]} session={session}/>
               ))
             }
           </ScrollSection>

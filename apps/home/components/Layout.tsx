@@ -6,6 +6,9 @@ import { CategoryIcon, DiscoverIcon, FollowingIcon, HashtagIcon, TrendingIcon, W
 import useSWR from 'swr';
 import axios from 'axios';
 import { GetSession } from '../api/user';
+import { getHotkeyHandler } from '@mantine/hooks';
+import { useRouter } from 'next/router';
+import TopAlert from 'ui/components/TopAlert';
 
 function Layout({children,isNavHidden}:{children:React.ReactNode,isNavHidden?:boolean}) {
   const { t } = useTranslation();
@@ -44,10 +47,25 @@ function Layout({children,isNavHidden}:{children:React.ReactNode,isNavHidden?:bo
       links: hashtags,
     }
   ]
+  const router = useRouter();
+  useEffect(() => {
+    document.body.addEventListener(
+      'keydown',
+      getHotkeyHandler([
+        ['mod+D', () => router.push('/discover')],
+        ['mod+T', () => router.push('/trending')],
+        ['mod+F', () => router.push('/following')],
+        ['mod+W', () => router.push('/writers')],
+      ])
+    );
+  })
   return (
-    <Shell isNavHidden={isNavHidden} sideBardata={sideBarData}  navData={navData} session={session?.user} isLoading={isLoading}>
+   <div>
+      
+     <Shell isNavHidden={isNavHidden} sideBardata={sideBarData}  navData={navData} session={session?.user} isLoading={isLoading}>
       {children}
     </Shell>
+   </div>
   )
 }
 

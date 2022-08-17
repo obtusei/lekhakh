@@ -8,10 +8,12 @@ import blogData from 'ui/lib/blogData'
 import Layout from '../components/Layout'
 import useTranslation from 'next-translate/useTranslation'
 import { useRouter } from 'next/router'
+import { GetSession } from '../api/user'
 
 export default function Trending() {
   const {t} = useTranslation();
   const router = useRouter();
+  const session = GetSession()
   return (
     <Layout>
           <Title order={2}>{t('common:trending')}</Title>
@@ -44,7 +46,7 @@ export default function Trending() {
           <Title order={4}>{t('common:trends')}</Title>
           <br />
           <Grid>
-            <Grid.Col span={4}><BlogCard {...blogData[0]} isSmall/></Grid.Col>
+            <Grid.Col span={4}><BlogCard props={blogData[0]} session={session} isSmall/></Grid.Col>
           </Grid>
     </Layout>
   )

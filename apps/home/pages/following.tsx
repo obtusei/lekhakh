@@ -1,6 +1,7 @@
 import React from 'react'
 import { Grid,Title, Shell, SimpleGrid, Divider,Text } from 'ui'
 import BlogCard from 'ui/components/Cards/BlogCard'
+import ShortcutLists from 'ui/components/ShortcutLists'
 import blogData from 'ui/lib/blogData'
 import Layout from '../components/Layout'
 
@@ -13,7 +14,7 @@ function Following() {
           <br />
           <Divider/>
           <br />
-          <Grid grow>
+          {/* <Grid grow>
             <Grid.Col span={4}>
               <BlogCard {...blogData[0]}/>
             </Grid.Col>
@@ -29,7 +30,8 @@ function Following() {
             <Grid.Col span={4}>
               <BlogCard {...blogData[0]}/>
             </Grid.Col>
-          </Grid>
+          </Grid> */}
+          <ShortcutLists/>
     </Layout>
   )
 }

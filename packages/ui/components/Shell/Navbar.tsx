@@ -1,9 +1,11 @@
 import React from 'react'
-import { Header,Stack,ActionIcon,Button,useMantineColorScheme, Menu, Text, UnstyledButton, Avatar, Group} from '@mantine/core'
+import { Header,Stack,ActionIcon,Button,useMantineColorScheme, Menu, Text, UnstyledButton, Avatar, Group, Input, Code} from '@mantine/core'
 import { SunIcon,MoonIcon } from '../../Icons'
 import { IconArrowBarRight, IconBookmark, IconBug, IconChevronDown, IconMessage, IconSearch, IconSettings, IconUser } from '@tabler/icons';
 import { LogoLink } from '../StateButtons';
 import { NavData } from '../../lib/interfaces';
+import { ColorModeAndLocale } from '../LowerMenu';
+import TopAlert from '../TopAlert';
 
 export default function Navbar({navData,session,isLoading}: {navData:NavData,session?:any,isLoading?:boolean}) {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
@@ -30,13 +32,8 @@ export default function Navbar({navData,session,isLoading}: {navData:NavData,ses
                 ):
                 (
                   <Stack style={{flexDirection:"row",alignItems:"center"}}>
-                <ActionIcon
-                  color={dark ? 'yellow' : 'blue'}
-                  onClick={() => toggleColorScheme()}
-                  title="Toggle color scheme"
-                >
-                  {dark ? <SunIcon/> : <MoonIcon/>}
-                </ActionIcon>
+                  <ColorModeAndLocale/>
+                  <Input placeholder='Search' rightSection={<Code>/</Code>} variant="filled"/>
                 {
                   session ? (
                     <Menu>
