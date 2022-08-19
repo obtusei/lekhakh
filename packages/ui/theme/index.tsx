@@ -1,5 +1,6 @@
 import { MantineThemeOverride} from "@mantine/core";
-import { Button } from "./elements/Button";
+import { Button,Loader } from "./elements/Button";
+
 
 const theme:MantineThemeOverride = {
   colors:{
@@ -8,7 +9,7 @@ const theme:MantineThemeOverride = {
     lekhakh:["#FECC02","#F1C101","#E4B701","#CBA301","#B18E01","#977901"], // 0-5
   },
   components:{
-      Button
+      Button,
   }       
 }
 

@@ -84,7 +84,6 @@ model Category {
 
 model Like {
   id     String @id @default(cuid())
-  count  Int
   blogId String
   blog   Blog   @relation(fields: [blogId], references: [id])
   userId String
@@ -92,11 +91,13 @@ model Like {
 }
 
 model Comment {
-  id     String  @id @default(cuid())
-  blogId String
-  blog   Blog    @relation(fields: [blogId], references: [id])
-  User   User?   @relation(fields: [userId], references: [id])
-  userId String?
+  id        String   @id @default(cuid())
+  text      String
+  blogId    String
+  blog      Blog     @relation(fields: [blogId], references: [id])
+  User      User     @relation(fields: [userId], references: [id])
+  userId    String
+  createdAt DateTime @default(now())
 }
 
 model SavedBlogByUser {

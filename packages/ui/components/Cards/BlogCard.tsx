@@ -1,11 +1,11 @@
 import { Avatar, Badge, Button, Card, Group, Text, Title,Stack,Paper,HoverCard, Anchor, Modal} from '@mantine/core'
 import Link from 'next/link'
 import { useState } from 'react'
-import { BlogProps } from '../../lib/interfaces'
+import { IBlog } from '../../lib/interfaces'
 import Href from '../Link'
 import { BookmarkButton, CommentButton, LikeButton, ShareButton } from '../StateButtons'
 
-function BlogCard({props,session,isSmall}:{props:BlogProps,session:any,isSmall?:boolean}) {
+function BlogCard({props,session,isSmall,index}:{props:IBlog,session:any,isSmall?:boolean,index?:number}) {
   const [isOpen,setIsOpen] = useState(false);
   return (
     <div>
@@ -19,41 +19,41 @@ function BlogCard({props,session,isSmall}:{props:BlogProps,session:any,isSmall?:
         Lovely to meet you!
       </Modal>
 
-    <Link href='/blog/1' key={props.index}>
+    <Link href={`/blog/${props.id}`} key={props.id}>
       <Stack style={{flexDirection:"row",padding:"0px",minWidth:"400px"}}>
       {
         isSmall && (
-          <Title style={{opacity:0.4}}>{props.index}</Title>
+          <Title style={{opacity:0.4}}>{index}</Title>
         )
       }
       <Card shadow="sm" p="md" radius="md" withBorder style={{width:"100%"}}>
           <Group position='apart'>
                 <Group>
                   {/* Hover Card */}
-                  <HoverCard>
+                  {/* <HoverCard>
                   <HoverCard.Target>
                     <Group>
-                      <Avatar size="sm" src={props.writer.image} radius={20}/>
-                    <Text>{props.writer.name}</Text>
+                      <Avatar size="sm" src={props?.user.image || } radius={20}/>
+                    <Text>{props?.user.name}</Text>
                     </Group> 
                   </HoverCard.Target>
                   <HoverCard.Dropdown>
                     <Paper>
                       <Group>
-                      <Avatar size="sm" src={props.writer.image} radius={20}/>
+                      <Avatar size="sm" src={props?.user.image} radius={20}/>
                       <Stack spacing={0}>
-                        <Title order={4}>{props.writer.name}</Title>
+                        <Title order={4}>{props?.user.name}</Title>
                         <Group style={{opacity:0.5}}>
-                          <Text><span style={{fontWeight:'bold'}}>{props.writer.blogs}</span> Blogs</Text>
-                        <Text><span style={{fontWeight:'bold'}}>{props.writer.followers}</span> Followers</Text>
-                        <Text><span style={{fontWeight:'bold'}}>{props.writer.following}</span> Following</Text>
+                          <Text><span style={{fontWeight:'bold'}}>{props?.user.blogs}</span> Blogs</Text>
+                        <Text><span style={{fontWeight:'bold'}}>{props?.user.followers}</span> Followers</Text>
+                        <Text><span style={{fontWeight:'bold'}}>{props?.user.following}</span> Following</Text>
                         </Group>
                       </Stack>
                       </Group>
                       <Button size='sm'>Follow</Button>
                     </Paper>
                   </HoverCard.Dropdown>
-                  </HoverCard>
+                  </HoverCard> */}
                 {/* END */}
                 </Group>
                 <ShareButton/>
@@ -62,12 +62,12 @@ function BlogCard({props,session,isSmall}:{props:BlogProps,session:any,isSmall?:
           {
             !isSmall && (
               <>
-              <Text lineClamp={4}>{props.description}</Text>
+              <Text lineClamp={4}>{props.content}</Text>
               <Group mt={"sm"}>
                         {
                           props.tags.map((tag,index) => (
                             <div key={index}>
-                              <Href link={`/tag/${tag}`} title={tag}/>
+                              <Href link={`/tag/${tag.name.toLowerCase()}`} title={tag.name}/>
                             </div>
                           ))
                         }
@@ -76,8 +76,8 @@ function BlogCard({props,session,isSmall}:{props:BlogProps,session:any,isSmall?:
             )
           }
           <Group mt={"sm"}>
-            <Text>{props.date}</Text>
-            <Badge>{props.category}</Badge>
+            <Text>{props.updatedAt}</Text>
+            <Badge>{props.category.name}</Badge>
           </Group>
           <Group position="apart" mt={"md"}>
                     <Group>

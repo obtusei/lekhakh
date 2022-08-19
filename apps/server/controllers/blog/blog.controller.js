@@ -71,10 +71,6 @@ module.exports.specificBlog = async (req,res) => {
       const blog = await prisma.blog.findUnique({
         where:{
           id:req.params.id
-        },
-        include:{
-            category:true,
-            user:true,
         }        
       });
       const updateView = await prisma.blog.update({
@@ -83,6 +79,12 @@ module.exports.specificBlog = async (req,res) => {
         },
         data:{
           viewCount:blog.viewCount + 1
+        },
+        include:{
+            category:true,
+            user:true,
+            likes:true,
+            comments:true
         }
       })
       res.send(updateView)
@@ -94,34 +96,18 @@ module.exports.specificBlog = async (req,res) => {
 module.exports.trendingBlog = async (req,res) => {
   try{
     const trending = await prisma.blog.findFirst({
-      // where:{
-      //   viewCount:{
-      //     gt:8
-      //   }
-      // }
       take: 6,
       orderBy: {
         viewCount:'desc',
       },
-    })
-    res.json(trending)
-  }
-  catch{
-    res.status(200).send("ERROR")
-  }
-}
-
-module.exports.viewCountIncrease = async (req,res,next) => {
-  try{
-    const blog = await prisma.blog.update({
-      where:{
-        id:req.params.id
-      },
-      data:{
-        viewCount:prisma.blog.viewCount + 1
+      include:{
+        category:true,
+        user:true,
+        likes:true,
+        comments:true
       }
     })
-    next()
+    res.json(trending)
   }
   catch{
     res.status(200).send("ERROR")
@@ -153,5 +139,27 @@ module.exports.followingBlog = async (req,res,next) => {
       }
   catch{
         res.status(404).json({message:"Error connecting to server"})
+  }
+}
+
+module.exports.usersBlog = async (req,res) => {
+  try{
+      const blog = await prisma.user.findUnique({
+        where:{
+          username:req.params.username
+        } ,
+        include:{
+          blogs:{
+            include:{
+              category:true,
+              tag:true
+            }
+          },
+          
+        }       
+      });
+      res.send(blog)
+  }catch{
+      res.send("ERROR ayo")
   }
 }

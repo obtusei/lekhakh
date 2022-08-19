@@ -2,16 +2,7 @@ import { ActionIcon, Avatar, Button, ChevronIcon, Group, Stack,Text,Title } from
 import { IconChecks, IconCircleCheck } from '@tabler/icons'
 import React from 'react'
 import { TickIcon } from '../../Icons'
-
-export interface UserProfileCardProps {
-  image: string
-  name: string
-  username: string
-  bio: string
-  blogCount: number
-  followerCount: number
-  followingCount: number
-}
+import { IUser } from '../../lib/interfaces'
 
 export interface UserProfileCardStringProps {
   blogs: string
@@ -21,25 +12,25 @@ export interface UserProfileCardStringProps {
   contact: string
 }
 
-function ProfileCard({props,stringData,hideBio}:{props:UserProfileCardProps,stringData:UserProfileCardStringProps,hideBio:boolean}) {
+function ProfileCard({props,stringData,hideBio}:{props:any,stringData:UserProfileCardStringProps,hideBio?:boolean}) {
   return (
     <div>
       <Stack style={{flexDirection:"row",alignItems:"center"}} spacing={20}>
-        <Avatar size="xl" src={props.image} alt="User" radius={40} />
+        <Avatar size="xl" src={""} alt="User" radius={40} />
         <Group align={"center"}>
           <Stack spacing={0}>
-            <Title order={3}>{props.name}</Title>
+            <Title order={3}>{props?.name}</Title>
             <Group spacing={5}>
-                      <Text>@{props.username}</Text>
+                      <Text>@{props?.username}</Text>
                       <TickIcon/>
             </Group>
             {
-              hideBio ? "":<Text>{props.bio}</Text>
+              hideBio ? "":<Text>{props?.bio}</Text>
             }
             <Group>
-              <Text><span style={{fontWeight:"bold"}}>{props.blogCount}</span> {stringData.blogs}</Text>
-              <Text><span style={{fontWeight:"bold"}}>{props.followerCount}</span> {stringData.followers}</Text>
-              <Text><span style={{fontWeight:"bold"}}>{props.followingCount}</span> {stringData.following}</Text>
+              <Text><span style={{fontWeight:"bold"}}>{props?.blogs}</span> {stringData.blogs}</Text>
+              <Text><span style={{fontWeight:"bold"}}>{props?.followers}</span> {stringData.followers}</Text>
+              <Text><span style={{fontWeight:"bold"}}>{props?.following}</span> {stringData.following}</Text>
             </Group>
                     
           </Stack>

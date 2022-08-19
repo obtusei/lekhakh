@@ -1,17 +1,10 @@
 import React from 'react'
 import { Code, Table } from '@mantine/core';
-type Props = {}
+import SHORTCUTS from "../lib/shortcuts.json"
 
-function ShortcutLists({}: Props) {
+function ShortcutLists() {
 
-  const shortcuts = [
-  { title:"Discover tab", keyboard: 'Ctrl/Cmd + k' },
-  { title:"Discover tab", keyboard: 'Ctrl/Cmd + k' },
-  { title:"Discover tab", keyboard: 'Ctrl/Cmd + k' },
-  { title:"Discover tab", keyboard: 'Ctrl/Cmd + k' },
-];
-
-  const rows = shortcuts.map((shortcut) => (
+  const rows = SHORTCUTS.map((shortcut:{title:string,keyboard:string}) => (
     <tr key={shortcut.title}>
       <td>{shortcut.title}</td>
       <td><Code>{shortcut.keyboard}</Code></td>

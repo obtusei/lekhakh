@@ -1,4 +1,4 @@
-import { ButtonStylesParams,MantineTheme, ButtonProps, MantineColor } from "@mantine/core";
+import { ButtonStylesParams,MantineTheme, ButtonProps, MantineColor, LoaderProps } from "@mantine/core";
 
 export const col = (theme:MantineTheme,dark:MantineColor,light:MantineColor) => (theme.colorScheme == 'dark' ? dark:light)
 
@@ -38,4 +38,8 @@ export const Button:ButtonProps = {
         },
 
   })
+}
+
+export const Loader:LoaderProps = {
+  color:"red"
 }

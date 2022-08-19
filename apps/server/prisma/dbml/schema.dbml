@@ -69,7 +69,6 @@ Table Category {
 
 Table Like {
   id String [pk]
-  count Int [not null]
   blogId String [not null]
   blog Blog [not null]
   userId String [not null]
@@ -78,10 +77,12 @@ Table Like {
 
 Table Comment {
   id String [pk]
+  text String [not null]
   blogId String [not null]
   blog Blog [not null]
-  User User
-  userId String
+  User User [not null]
+  userId String [not null]
+  createdAt DateTime [default: `now()`, not null]
 }
 
 Table SavedBlogByUser {

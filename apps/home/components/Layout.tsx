@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Shell } from 'ui'
+import { Shell, useMantineColorScheme } from 'ui'
 import { NavData, SideBarProps } from 'ui/lib/interfaces'
 import useTranslation from 'next-translate/useTranslation';
 import { CategoryIcon, DiscoverIcon, FollowingIcon, HashtagIcon, TrendingIcon, WriterIcon } from 'ui/Icons';
@@ -17,7 +17,8 @@ function Layout({children,isNavHidden}:{children:React.ReactNode,isNavHidden?:bo
   const categories:{ label: string; link: string }[] = catData?.map(({name}:{name:string})=>({label:name,link:`/category/${name.toLowerCase()}`})) || [];
   const hashtags:{ label: string; link: string }[] = tagData?.map(({name}:{name:string})=>({label:name,link:`/tag/${name.toLowerCase()}`})) || [];
   const {session,isLoading} = GetSession();
-
+  const {colorScheme,toggleColorScheme} = useMantineColorScheme()
+  
   const navData:NavData = {
     login:t('common:login'),
     register:t('common:beOne'),
@@ -56,6 +57,7 @@ function Layout({children,isNavHidden}:{children:React.ReactNode,isNavHidden?:bo
         ['mod+T', () => router.push('/trending')],
         ['mod+F', () => router.push('/following')],
         ['mod+W', () => router.push('/writers')],
+        ['mod+J', () => toggleColorScheme()],
       ])
     );
   })

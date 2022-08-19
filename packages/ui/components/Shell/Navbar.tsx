@@ -1,6 +1,6 @@
 import React from 'react'
-import { Header,Stack,ActionIcon,Button,useMantineColorScheme, Menu, Text, UnstyledButton, Avatar, Group, Input, Code} from '@mantine/core'
-import { SunIcon,MoonIcon } from '../../Icons'
+import { Header,Stack,ActionIcon,Button,useMantineColorScheme, Menu, Text, UnstyledButton, Avatar, Group, Input, Code, MediaQuery, Select} from '@mantine/core'
+import { SunIcon,MoonIcon, TickIcon } from '../../Icons'
 import { IconArrowBarRight, IconBookmark, IconBug, IconChevronDown, IconMessage, IconSearch, IconSettings, IconUser } from '@tabler/icons';
 import { LogoLink } from '../StateButtons';
 import { NavData } from '../../lib/interfaces';
@@ -10,7 +10,7 @@ import TopAlert from '../TopAlert';
 export default function Navbar({navData,session,isLoading}: {navData:NavData,session?:any,isLoading?:boolean}) {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === 'dark';
-
+  
   function getInitial(name:string){
     let initial:string;
     if (name.includes(' ')){
@@ -32,8 +32,10 @@ export default function Navbar({navData,session,isLoading}: {navData:NavData,ses
                 ):
                 (
                   <Stack style={{flexDirection:"row",alignItems:"center"}}>
-                  <ColorModeAndLocale/>
-                  <Input placeholder='Search' rightSection={<Code>/</Code>} variant="filled"/>
+                  {/* <MediaQuery smallerThan={"md"} styles={{display:"none"}}> */}
+                    <ColorModeAndLocale/>
+                    <Input placeholder='Search' rightSection={<Code>/</Code>} variant="filled"/>
+                  {/* </MediaQuery> */}
                 {
                   session ? (
                     <Menu>

@@ -21,20 +21,46 @@ export interface NavData{
   feedback:string,
 }
 
-export interface BlogProps{
-          index:number
-          title:string
-          description:string
-          category:string
-          date:string
-          writer:{
-                    name:string
-                    image:string
-                    followers:number
-                    following:number
-                    blogs:number
-          }
-          tags:string[]
+export interface IBlog{
+          id:number,
+          title:string,
+          content:string,
+          createdAt:string,
+          updatedAt:string,
+          viewCount:number,
+          date:string,
+          category:ICategory,
+          user?:IUser
+          tags:ITag[]
+}
+
+export interface ICategory{
+  id:string,
+  name:string
+}
+
+export interface ITag{
+  id:string,
+  name:string,
+}
+
+export interface IUser{
+  id:string,
+  name:string,
+  email:string,
+  emailVerified:string,
+  isVerifiedUser:boolean,
+  isWriter:boolean,
+  isPublicAccount:boolean,
+  dataOfBirth:string,
+  username:string,
+  createdAt:string,
+  bio:string,
+  image:string,
+  role:string,
+  blogs?:number,
+  followers?:number,
+  following?:number
 }
 
 

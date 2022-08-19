@@ -1,15 +1,16 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Divider,Shell,useMantineColorScheme, Stack, NavLink, Title, Group, Grid, Center, Text} from "ui";
+import { Divider,Shell,useMantineColorScheme, Stack, NavLink, Title, Group, Grid, Center, Text, Container, Loader, useMantineTheme, Button} from "ui";
 import BlogCard from "ui/components/Cards/BlogCard";
 import CustomChip from "ui/components/CustomChip";
 import Hero from "ui/components/Hero";
 import LowerMenu from "ui/components/LowerMenu";
-import { DiscoverIcon,TrendingIcon } from "ui/Icons";
+import { DiscoverIcon,ReloadIcon,TickIcon,TrendingIcon } from "ui/Icons";
 import blogData from "ui/lib/blogData";
 import Layout from "../components/Layout";
 import useTranslation from "next-translate/useTranslation"
 import { GetSession, GetTags } from "../api/user";
+import { GetTrendingBlogs } from "../api/blog";
 
 export default function Web() {
   const {colorScheme,toggleColorScheme} = useMantineColorScheme();
@@ -24,7 +25,8 @@ export default function Web() {
   }
   const data = {title:heroData.title[0],subtitle:heroData.subtitle,description:heroData.description,buttonText:heroData.buttonText[0]}
   const {session} = GetSession()
-  const {tags,isLoading} = GetTags()
+  const {tags,isLoading:tagLoading} = GetTags()
+  const {trendData,isLoading:trendLoading,isError:trendError} = GetTrendingBlogs();
   return (
     <>
       <Layout isNavHidden={true}>
@@ -40,9 +42,13 @@ export default function Web() {
         <br />
         <Grid grow>
           {
-            [...Array(6)].map((trend,index) => (
-              <Grid.Col span={4} key={index}><BlogCard props={blogData[0]} session={session} isSmall={true}/></Grid.Col>
-            ))
+            trendData ? [trendData].map((trend,index) => (
+              <Grid.Col span={4} key={index}>
+                <BlogCard props={trend} session={session} isSmall={true} index={index}/>,
+                </Grid.Col>
+            )):
+            trendLoading ? <LoadingSection/>:
+            trendError ? <ErrorSection/>:<></>
           }
         </Grid>
 
@@ -56,7 +62,7 @@ export default function Web() {
         </Link>
         <br />
         <Grid grow>
-          <Grid.Col span={4}>
+          {/* <Grid.Col span={4}>
             <Stack>
               {
                 [...Array(10)].map((blog,index) => (
@@ -64,7 +70,7 @@ export default function Web() {
                 ))
               }
             </Stack>
-          </Grid.Col>
+          </Grid.Col> */}
 
           {/* TAGS SECTION */}
           <Grid.Col span={2}>
@@ -91,4 +97,28 @@ export default function Web() {
       </Layout>
     </>
   );
+}
+
+const ErrorSection = () => {
+  const theme = useMantineTheme()
+  return(
+    <Container>
+      <Center>
+        ERRORR... <br />
+        <Button leftIcon={<ReloadIcon/>} variant={"white"}>Retry</Button>
+      </Center>
+    </Container>
+  )
+}
+
+const LoadingSection = () => {
+  const theme = useMantineTheme()
+  
+  return(
+    <Container>
+      <Center>
+        <Loader color={theme.colorScheme == 'dark' ? theme.colors.lekhakh[0]:theme.colors.secondary[0]} size="md"/>
+      </Center>
+    </Container>
+  )
 }

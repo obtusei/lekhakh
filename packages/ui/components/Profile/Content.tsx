@@ -1,15 +1,16 @@
 import { Tabs } from '@mantine/core';
 import { IconPhoto, IconMessageCircle, IconSettings } from '@tabler/icons';
+import { ReactNode } from 'react';
 
 
 
-export default function Content() {
+export default function Content({children}:{children:ReactNode}) {
   return (
-    <Tabs defaultValue="gallery">
+    <Tabs defaultValue="blogs">
       <Tabs.List>
-        <Tabs.Tab value="gallery" icon={<IconPhoto size={14} />}>Blogs</Tabs.Tab>
-        <Tabs.Tab value="messages" icon={<IconMessageCircle size={14} />}>Category</Tabs.Tab>
-        <Tabs.Tab value="settings" icon={<IconSettings size={14} />}>Dates</Tabs.Tab>
+        <Tabs.Tab value="blogs" icon={<IconPhoto size={14} />}>Blogs</Tabs.Tab>
+        <Tabs.Tab value="category" icon={<IconMessageCircle size={14} />}>Category</Tabs.Tab>
+        <Tabs.Tab value="saved" icon={<IconSettings size={14} />}>Dates</Tabs.Tab>
       </Tabs.List>
 
       <Tabs.Panel value="gallery" pt="xs">

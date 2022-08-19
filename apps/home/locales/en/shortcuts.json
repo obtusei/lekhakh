@@ -1,0 +1,15 @@
+{
+  "discover":"Discover tab",
+  "trending":"Trending tab",
+  "following":"Following tab",
+  "writer":"Writers tab",
+  "search":"Activate Search bar",
+  "spotlight":"Open Spotlight",
+  "settings":"Open Settings",
+  "darkMode":"Dark Mode",
+  "help":"Open Help",
+  "savedBlogs":"Saved Blogs",
+  "account":"Accout",
+  "createNewBLog":"Create New Blog",
+  "logout":"Logout"
+}

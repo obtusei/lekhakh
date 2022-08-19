@@ -1,0 +1,50 @@
+[
+  {
+    "title":"Activate Search bar",
+    "keyboard": "/" 
+  },
+  { 
+    "title":"Discover tab", 
+    "keyboard": "Ctrl/Cmd + D" 
+  },
+  {
+    "title":"Trending tab",
+    "keyboard": "Ctrl/Cmd + T"
+  },
+  {
+    "title":"Following tab",
+    "keyboard": "Ctrl/Cmd + F"
+  },
+  {
+    "title":"Writers tab",
+    "keyboard": "Ctrl/Cmd + W"
+  },
+  {
+    "title":"Account tab",
+    "keyboard": "Ctrl/Cmd + A"
+  },
+  {
+    "title":"Open Spotlight",
+    "keyboard": "Ctrl/Cmd + K"
+  },
+  { 
+    "title":"Open Settings", 
+    "keyboard": "Ctrl/Cmd + S"
+  },
+  {
+    "title":"Dark Mode",
+    "keyboard": "Ctrl/Cmd + J"
+  },
+  {
+    "title":"Open Help",
+    "keyboard": "Ctrl/Cmd + F"
+  },
+  {
+    "title":"Saved Blogs",
+    "keyboard": "Ctrl/Cmd + B"
+  },
+  {
+    "title":"Account",
+    "keyboard": "Ctrl/Cmd + U" 
+  }
+]

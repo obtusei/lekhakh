@@ -4,6 +4,8 @@ import blogData from 'ui/lib/blogData'
 import BlogPost from 'ui/components/BlogPost'
 import Layout from '../../components/Layout'
 import { Button } from 'ui'
+import { useRouter } from 'next/router'
+import { GetSpecificBlog } from '../../api/blog'
 function Blog({}) {
   
   // const [synRef,setSynRef] = useState(new SpeechSynthesis);
@@ -12,25 +14,20 @@ function Blog({}) {
   //   setSynRef(window.speechSynthesis)
   // },[])
 
-function getLoc(){
-  window.navigator.geolocation.getCurrentPosition(
-      (newPos) => console.log(newPos)
-    );
-  console.log(window.navigator.language)
-}
-  // const speak = (text:string) => {
-  //   const utterance = new SpeechSynthesisUtterance(text)
-  //   utterance.lang = 'en-US'
-  //   utterance.rate = 1.0
-  //   utterance.pitch = 1.0
-  //   utterance.volume = 1.0
-  //   synRef.current.speak(utterance)
-  // }
+// function getLoc(){
+//   window.navigator.geolocation.getCurrentPosition(
+//       (newPos) => console.log(newPos)
+//     );
+//   console.log(window.navigator.language)
+// }
+  const router = useRouter()
+  const id:string = String(router.query.id);
+  const {blogData} = GetSpecificBlog(id) 
+
   const [isPlaying,setIsPlaying] = useState(false)
   return (
     <Layout>
-      <Button onClick={() => getLoc()}>Get Location</Button>
-      <BlogPost props={blogData[0]} onPlayClick={
+      <BlogPost props={blogData} onPlayClick={
         () => {
           //
         }

@@ -1,14 +1,14 @@
 import Link from 'next/link'
 import { Title,Text, Divider, Group, Avatar, Stack, Input, Button, Badge, ActionIcon } from '@mantine/core'
 import blogData from '../lib/blogData'
-import { BlogProps } from '../lib/interfaces'
+import { IBlog } from '../lib/interfaces'
 import { IconArrowLeft, IconBookmark, IconHeart, IconShare } from '@tabler/icons'
 import { BookmarkButton, LikeButton, PauseButton, PlayButton, ShareButton } from './StateButtons'
 import { ShareIcon } from '../Icons'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 
-function BlogPost({props,onPlayClick}:{props:BlogProps,onPlayClick:()=>void}) {
+function BlogPost({props,onPlayClick}:{props?:IBlog,onPlayClick:()=>void}) {
   const router = useRouter();
   const [isPlaying,setIsPlaying] = useState(true)
   return (
@@ -19,36 +19,31 @@ function BlogPost({props,onPlayClick}:{props:BlogProps,onPlayClick:()=>void}) {
         <Button leftIcon={<IconArrowLeft/>} variant="white" onClick={() => router.back()}>Go Back</Button>
         </Group>
         <Group>
-          <LikeButton/>
+          <LikeButton onClick={
+            () => {
+
+            }
+          }/>
           <BookmarkButton/>
           <ShareButton/>
         </Group>
-      </Group><br />
-      {isPlaying ? <PauseButton onClick={
-        () => {
-          setIsPlaying(false)
-          onPlayClick()
-        }
-      }/>:<PlayButton onClick={
-        () => {
-          setIsPlaying(true)
-          onPlayClick()
-        }
-      }/>} <br />
-      <Badge>{props.category}</Badge>
-      <Title>{props.title}</Title>
+      </Group>
+      <br />
+      
+      <Badge>{props?.category.name}</Badge>
+      <Title>{props?.title}</Title>
       <br />
       <Group align={"center"}>
-        <Avatar src={props.writer.image} size="md" radius={30}/>
+        <Avatar src={props?.user.image} size="md" radius={30}/>
         <Stack spacing={0}>
-          <Text>By <Link href={"/"}>{props.writer.name}</Link></Text>
-          <Text size={'sm'} color="dimmed">Updated: {props.date}</Text>
+          <Text>By <Link href={"/lvo"}>{props?.user.name || ""}</Link></Text>
+          <Text size={'sm'} color="dimmed">Updated: {props?.updatedAt}</Text>
         </Stack>
       </Group>
       <br />
 
       <div>
-        <Text>{props.description}</Text>
+        <Text>{props?.content}</Text>
       </div><br />
       <Group style={{padding:"10px"}}>
         <Text><span style={{fontWeight:"bold"}}>12</span> Likes</Text>
