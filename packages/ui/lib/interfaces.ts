@@ -22,16 +22,15 @@ export interface NavData{
 }
 
 export interface IBlog{
-          id:number,
+          id:string,
           title:string,
           content:string,
           createdAt:string,
           updatedAt:string,
           viewCount:number,
-          date:string,
           category:ICategory,
-          user?:IUser
-          tags:ITag[]
+          user:IUser
+          tag:ITag[]
 }
 
 export interface ICategory{
@@ -58,9 +57,10 @@ export interface IUser{
   bio:string,
   image:string,
   role:string,
-  blogs?:number,
+  blogsCount?:number,
   followers?:number,
   following?:number
+  blogs?:IBlog[]
 }
 
 

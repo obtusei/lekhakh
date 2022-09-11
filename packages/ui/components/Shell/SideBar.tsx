@@ -4,6 +4,7 @@ import {
   NavLink,
   Title,
   useMantineTheme,
+  ScrollArea
 } from '@mantine/core';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -21,7 +22,8 @@ export default function SideBar(props: {data: SideBarProps[]}){
   const mainColor = colorScheme === 'dark' ? theme.colors.primary[7]:theme.colors.primary[0];
   return (
     <Navbar p="md" hiddenBreakpoint="sm" hidden width={{ sm: 0, lg: 300 }} style={{border:"none"}}>
-      {
+      <ScrollArea>
+        {
               data.map((navItem,index) => (
                 <Link href={`${navItem.href}`} passHref key={index}>
                    <NavLink label={navItem.label} icon={DiscoverIcon} defaultOpened style={{color:router.pathname === navItem.href ? activeColor:mainColor,fontWeight:"600"}}>
@@ -36,6 +38,9 @@ export default function SideBar(props: {data: SideBarProps[]}){
                    </Link>
               ))
       }
+      </ScrollArea>
+
+
     </Navbar>
   )
 }

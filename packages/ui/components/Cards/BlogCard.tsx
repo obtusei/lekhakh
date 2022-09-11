@@ -30,10 +30,10 @@ function BlogCard({props,session,isSmall,index}:{props:IBlog,session:any,isSmall
           <Group position='apart'>
                 <Group>
                   {/* Hover Card */}
-                  {/* <HoverCard>
+                  <HoverCard>
                   <HoverCard.Target>
                     <Group>
-                      <Avatar size="sm" src={props?.user.image || } radius={20}/>
+                      <Avatar size="sm" src={props?.user.image} radius={20}/>
                     <Text>{props?.user.name}</Text>
                     </Group> 
                   </HoverCard.Target>
@@ -53,7 +53,7 @@ function BlogCard({props,session,isSmall,index}:{props:IBlog,session:any,isSmall
                       <Button size='sm'>Follow</Button>
                     </Paper>
                   </HoverCard.Dropdown>
-                  </HoverCard> */}
+                  </HoverCard>
                 {/* END */}
                 </Group>
                 <ShareButton/>
@@ -64,13 +64,13 @@ function BlogCard({props,session,isSmall,index}:{props:IBlog,session:any,isSmall
               <>
               <Text lineClamp={4}>{props.content}</Text>
               <Group mt={"sm"}>
-                        {
-                          props.tags.map((tag,index) => (
+                        {/* {
+                          props.tag.map((tag,index) => (
                             <div key={index}>
                               <Href link={`/tag/${tag.name.toLowerCase()}`} title={tag.name}/>
                             </div>
                           ))
-                        }
+                        } */}
               </Group>
               </>
             )

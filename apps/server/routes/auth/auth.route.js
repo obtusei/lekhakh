@@ -30,9 +30,8 @@ auth.get('/login-failure', (req, res, next) => {
 auth.get("/info",(req,res) => {
     if (req.user) {
         res.json({ user:req.user })
-    } else {
-        res.json({ user:"Not Login In" })
-    }
+    } 
+    res.send("ERROR")
 })
 
 auth.get('/login', (req, res, next) => {

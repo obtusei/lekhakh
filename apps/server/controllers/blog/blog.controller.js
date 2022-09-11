@@ -114,6 +114,30 @@ module.exports.trendingBlog = async (req,res) => {
   }
 }
 
+module.exports.discoverBlog = async (req,res) => {
+  try{
+    const discover = await prisma.category.findMany({
+      take:10,
+      include:{
+        blogs:{
+          include:{
+            category:true,
+            user:true,
+            tag:true
+          }
+        }
+      }
+    })
+    const data = discover.sort(() => Math.random() - 0.5)
+    res.json(data)
+  }
+  catch{
+    res.status(200).send("ERROR")
+  }
+}
+
+
+
 module.exports.followingBlog = async (req,res,next) => {
   try{
       const following = await prisma.user.findUnique({

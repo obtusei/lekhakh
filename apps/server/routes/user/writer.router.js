@@ -9,6 +9,31 @@ writer.get("/",async (req,res) => {
           isWriter:{
             equals:true
           }
+        },
+        include:{
+          blogs:{
+            select:{
+              category:true
+            }
+          }
+        }
+    })
+    res.json(writers)
+  }
+  catch{
+    console.log("ERROR")
+  }
+})
+
+writer.get("/cat",async (req,res) => {
+  try{
+    const writers = await prisma.category.findMany({
+        include:{
+          blogs:{
+            select:{
+              user:true
+            }
+          }
         }
     })
     res.json(writers)

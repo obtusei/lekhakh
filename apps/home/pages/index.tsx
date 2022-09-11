@@ -62,7 +62,7 @@ export default function Web() {
         </Link>
         <br />
         <Grid grow>
-          {/* <Grid.Col span={4}>
+          <Grid.Col span={4}>
             <Stack>
               {
                 [...Array(10)].map((blog,index) => (
@@ -70,7 +70,7 @@ export default function Web() {
                 ))
               }
             </Stack>
-          </Grid.Col> */}
+          </Grid.Col>
 
           {/* TAGS SECTION */}
           <Grid.Col span={2}>

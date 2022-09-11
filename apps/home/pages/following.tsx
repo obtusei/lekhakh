@@ -6,7 +6,7 @@ import blogData from 'ui/lib/blogData'
 import Layout from '../components/Layout'
 
 function Following() {
-          const followers = 313
+  const followers = 313
   return (
     <Layout>
           <Title>Following</Title>

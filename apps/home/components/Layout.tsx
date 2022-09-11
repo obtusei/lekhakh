@@ -64,7 +64,7 @@ function Layout({children,isNavHidden}:{children:React.ReactNode,isNavHidden?:bo
   return (
    <div>
       
-     <Shell isNavHidden={isNavHidden} sideBardata={sideBarData}  navData={navData} session={session?.user} isLoading={isLoading}>
+     <Shell isNavHidden={isNavHidden} sideBardata={sideBarData}  navData={navData} session={session != null ? session.user : null} isLoading={isLoading}>
       {children}
     </Shell>
    </div>

@@ -24,7 +24,7 @@ model User {
   emailVerified   DateTime?
   isVerifiedUser  Boolean           @default(false)
   isWriter        Boolean           @default(false)
-  isPublicAccount Boolean           @default(false)
+  isPublicAccount Boolean           @default(true)
   dateOfBirth     DateTime?
   username        String            @unique
   password        String
