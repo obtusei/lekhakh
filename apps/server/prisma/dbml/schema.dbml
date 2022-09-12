@@ -9,7 +9,7 @@ Table User {
   emailVerified DateTime
   isVerifiedUser Boolean [not null, default: false]
   isWriter Boolean [not null, default: false]
-  isPublicAccount Boolean [not null, default: false]
+  isPublicAccount Boolean [not null, default: true]
   dateOfBirth DateTime
   username String [unique, not null]
   password String [not null]
