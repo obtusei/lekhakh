@@ -5,9 +5,18 @@ import { IBlog, IUser } from "ui/lib/interfaces"
 const fetcher = (url:any) => axios.get(url,{withCredentials:true}).then(res => res.data)
 
 export function GetTrendingBlogs () { 
-  const { data,error } = useSWR<IBlog>('/blog/trending',fetcher)
+  const { data,error } = useSWR<[IBlog]>('/blog/trending',fetcher)
   return {
     trendData: data,
+    isLoading: !error && !data,
+    isError: error
+  }
+}
+
+export function GetTopBlogs () { 
+  const { data,error } = useSWR<[IBlog]>('/blog/top',fetcher)
+  return {
+    topData: data,
     isLoading: !error && !data,
     isError: error
   }

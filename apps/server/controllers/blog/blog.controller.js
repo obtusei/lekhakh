@@ -95,7 +95,7 @@ module.exports.specificBlog = async (req,res) => {
 
 module.exports.trendingBlog = async (req,res) => {
   try{
-    const trending = await prisma.blog.findFirst({
+    const trending = await prisma.blog.findMany({
       take: 6,
       orderBy: {
         viewCount:'desc',
@@ -108,6 +108,24 @@ module.exports.trendingBlog = async (req,res) => {
       }
     })
     res.json(trending)
+  }
+  catch{
+    res.status(200).send("ERROR")
+  }
+}
+
+module.exports.topBlog = async (req,res) => {
+  try{
+    const top = await prisma.blog.findMany({
+      take: 10,
+      include:{
+        category:true,
+        user:true,
+        likes:true,
+        comments:true
+      }
+    })
+    res.json(top)
   }
   catch{
     res.status(200).send("ERROR")

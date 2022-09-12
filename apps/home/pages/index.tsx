@@ -10,7 +10,8 @@ import blogData from "ui/lib/blogData";
 import Layout from "../components/Layout";
 import useTranslation from "next-translate/useTranslation"
 import { GetSession, GetTags } from "../api/user";
-import { GetTrendingBlogs } from "../api/blog";
+import { GetDiscoverBlogs, GetTopBlogs, GetTrendingBlogs } from "../api/blog";
+import { ITag } from "ui/lib/interfaces";
 
 export default function Web() {
   const {colorScheme,toggleColorScheme} = useMantineColorScheme();
@@ -27,6 +28,7 @@ export default function Web() {
   const {session} = GetSession()
   const {tags,isLoading:tagLoading} = GetTags()
   const {trendData,isLoading:trendLoading,isError:trendError} = GetTrendingBlogs();
+  const {topData} = GetTopBlogs();
   return (
     <>
       <Layout isNavHidden={true}>
@@ -42,7 +44,7 @@ export default function Web() {
         <br />
         <Grid grow>
           {
-            trendData ? [trendData].map((trend,index) => (
+            trendData ? trendData.map((trend,index) => (
               <Grid.Col span={4} key={index}>
                 <BlogCard props={trend} session={session} isSmall={true} index={index}/>,
                 </Grid.Col>
@@ -65,8 +67,8 @@ export default function Web() {
           <Grid.Col span={4}>
             <Stack>
               {
-                [...Array(10)].map((blog,index) => (
-                  <BlogCard props={blogData[0]} session={session}/>
+                topData?.map((blog,index) => (
+                  <BlogCard props={blog} session={session}/>
                 ))
               }
             </Stack>
@@ -78,7 +80,7 @@ export default function Web() {
             <Title order={4}>{t("common:tagsYouLike")}</Title>
             <Group spacing={15} mt={"10px"}>
             {
-              tags ? tags.map((tag,index:number) => (
+              tags ? tags.map((tag:ITag,index:number) => (
                 <CustomChip key={index} href={`/tag`} title={tag.name}/>
               ))
               : <CustomChip key={1} href={`/`} title={"Loading..."}/>
