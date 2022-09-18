@@ -20,28 +20,27 @@ enum Role {
 }
 
 model User {
-  id              String            @id @default(cuid())
-  name            String
-  email           String            @unique
-  emailVerified   DateTime?
-  isVerifiedUser  Boolean           @default(false)
-  isWriter        Boolean           @default(false)
-  isPublicAccount Boolean           @default(true)
-  dateOfBirth     DateTime?
-  username        String            @unique
-  password        String
-  createdAt       DateTime          @default(now())
-  bio             String?
-  image           String?
-  blogs           Blog[]
-  liked           Like[]
-  commented       Comment[]
-  role            Role              @default(USER)
-  followers       Follows[]         @relation("following")
-  following       Follows[]         @relation("follower")
-  sessions        Session[]
-  saccounts       SessionAccount[]
-  SavedBlog       SavedBlogByUser[]
+  id             String            @id @default(cuid())
+  name           String
+  email          String            @unique
+  emailVerified  Boolean           @default(false)
+  isVerifiedUser Boolean           @default(false)
+  isWriter       Boolean           @default(false)
+  dateOfBirth    DateTime?
+  username       String            @unique
+  password       String
+  createdAt      DateTime          @default(now())
+  bio            String?
+  image          String?
+  blogs          Blog[]
+  liked          Like[]
+  commented      Comment[]
+  role           Role              @default(USER)
+  followers      Follows[]         @relation("following")
+  following      Follows[]         @relation("follower")
+  sessions       Session[]
+  saccounts      SessionAccount[]
+  SavedBlog      SavedBlogByUser[]
 }
 
 model Follows {
@@ -78,7 +77,7 @@ model Tag {
 
 model Category {
   id    String @id @default(cuid())
-  name  String
+  name  String @unique
   blogs Blog[]
 }
 

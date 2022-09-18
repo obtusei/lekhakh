@@ -28,10 +28,10 @@ auth.get('/login-failure', (req, res, next) => {
 });
 
 auth.get("/info",(req,res) => {
-    if (req.user) {
+    // if (req.user) {
         res.json({ user:req.user })
-    } 
-    res.send("ERROR")
+    // } 
+    // res.send("ERROR")
 })
 
 auth.get('/login', (req, res, next) => {

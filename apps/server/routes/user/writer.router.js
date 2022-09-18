@@ -25,9 +25,32 @@ writer.get("/",async (req,res) => {
   }
 })
 
+writer.get("/hot",async (req,res) => {
+  try{
+    const writers = await prisma.user.findMany({
+      where:{
+        isWriter:true
+      },
+      include:{
+            _count: {
+                  select: { 
+                        blogs: true,
+                        followers:true,
+                        following:true
+                  },
+            },
+      }
+    })
+    res.status(200).json(writers)
+  }
+  catch{
+    res.status(404).send("Error while loading from the database")
+  }
+})
+
 writer.get("/cat",async (req,res) => {
   try{
-    const writers = await prisma.category.findMany({
+    const users = await prisma.category.findMany({
         include:{
           blogs:{
             select:{
@@ -35,8 +58,10 @@ writer.get("/cat",async (req,res) => {
             }
           }
         }
+        
     })
-    res.json(writers)
+    ///const writers = users.filter((user) => { return user.isWriter === true})
+    res.json(users)
   }
   catch{
     console.log("ERROR")

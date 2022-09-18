@@ -93,6 +93,27 @@ module.exports.specificBlog = async (req,res) => {
   }
 }
 
+module.exports.trendoftheday = async (req,res) => {
+  try{
+    const trending = await prisma.blog.findMany({
+      take: 6,
+      orderBy: {
+        viewCount:'desc',
+      },
+      include:{
+        category:true,
+        user:true,
+        likes:true,
+        comments:true
+      }
+    })
+    res.json(trending)
+  }
+  catch{
+    res.status(200).send("ERROR")
+  }
+}
+
 module.exports.trendingBlog = async (req,res) => {
   try{
     const trending = await prisma.blog.findMany({
@@ -146,8 +167,8 @@ module.exports.discoverBlog = async (req,res) => {
         }
       }
     })
-    const data = discover.sort(() => Math.random() - 0.5)
-    res.json(data)
+    const filteredDiscover = discover.filter((dis) => {return dis.blogs.length != 0}).sort(() => Math.random() - 0.5)
+    res.json(filteredDiscover)
   }
   catch{
     res.status(200).send("ERROR")
@@ -167,7 +188,13 @@ module.exports.followingBlog = async (req,res,next) => {
                         select:{
                               following:{
                                   select:{
-                                    blogs:true
+                                    blogs:{
+                                      include:{
+                                        category:true,
+                                        user:true,
+                                        // tag:true
+                                      }
+                                    }
                                   }
                               },
                         }
@@ -175,9 +202,13 @@ module.exports.followingBlog = async (req,res,next) => {
             }
       })
       if (!following){
-          res.status(204).json({message:"User has no followers"})
+          res.status(204).json(null)
       }
-      res.status(200).json(following)
+      const data = [];
+      for(fol of following.following){
+        data.push(...fol.following.blogs)
+      }
+      res.status(200).json(data)
       }
   catch{
         res.status(404).json({message:"Error connecting to server"})
@@ -203,5 +234,27 @@ module.exports.usersBlog = async (req,res) => {
       res.send(blog)
   }catch{
       res.send("ERROR ayo")
+  }
+}
+
+module.exports.getSpecificCat = async (req,res) => {
+  try{
+    let category = await prisma.category.findUnique({
+      where:{
+        name:req.params.name
+      },
+      include:{
+        blogs:{
+          include:{
+            user:true,
+            tag:true,
+          }
+        }
+      }
+    })
+    res.json(category)
+  }
+  catch{
+    res.send("ERROR ho")
   }
 }

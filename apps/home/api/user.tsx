@@ -55,6 +55,15 @@ export function GetSession () {
   }
 }
 
+export function GetUserbyUsername(username:string) { 
+  const { data,error } = useSWR(`/user/${username}`,fetcher)
+  return {
+    session: data,
+    isLoading: !error && !data,
+    isError: error
+  }
+}
+
 
 export function GetCategories () {
   const { data,error } = useSWR('/admin/categories')

@@ -37,5 +37,6 @@
       "tagsYouLike":"Tags you may like",
       "seeMore":"See more",
       "hotWriters":"Hot Writers",
-      "trends":"Trends"
+      "trends":"Trends",
+      "fromFollowers":"From {{follower}} followers you have"
 }

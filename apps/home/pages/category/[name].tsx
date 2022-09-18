@@ -10,7 +10,7 @@ function DiscoverType() {
   return (
     <Layout>
       <Group>
-        <Title>{router.query.type}</Title>
+        <Title>{router.query.name}</Title>
       </Group><br />
       <Grid grow>
         <Grid.Col span={4}><BlogCard {...blogData[0]}/></Grid.Col>

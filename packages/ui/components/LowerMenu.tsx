@@ -43,7 +43,7 @@ export const ColorModeAndLocale = () => {
         () => {
           toggleColorScheme();
         }
-      }>
+      } aria-label="Dark Mode">
         {
           colorScheme === 'dark' ? <SunIcon color="gray" opacity={0.8}/>:<MoonIcon color="gray" opacity={0.8} />
         }
@@ -55,8 +55,7 @@ export default function LowerMenu() {
   const router = useRouter()
   return (
     <Group>
-      <ColorModeAndLocale/>
-      <Href title="Home" link="/" />
+      <ColorModeAndLocale/> <Href title="Home" link="/" />
       <Href title="FAQS" link="/" />
       <Href title="Login" link="/" />
       <Menu trigger="hover">

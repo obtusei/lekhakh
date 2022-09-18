@@ -4,11 +4,17 @@ import {
   NavLink,
   Title,
   useMantineTheme,
-  ScrollArea
+  ScrollArea,
+  Text,
+  Kbd,
+  Tooltip,
+  Button,
+  Stack,
+  Group
 } from '@mantine/core';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { DiscoverIcon } from '../../Icons';
+import { DiscoverIcon, SunIcon } from '../../Icons';
 import { SideBarProps } from '../../lib/interfaces';
 import { NAVDATA } from '../../lib/navdata';
 import { useMantineColorScheme } from '@mantine/core';
@@ -25,7 +31,7 @@ export default function SideBar(props: {data: SideBarProps[]}){
       <ScrollArea>
         {
               data.map((navItem,index) => (
-                <Link href={`${navItem.href}`} passHref key={index}>
+                  <Link href={`${navItem.href}`} passHref>
                    <NavLink label={navItem.label} icon={DiscoverIcon} defaultOpened style={{color:router.pathname === navItem.href ? activeColor:mainColor,fontWeight:"600"}}>
                     {
                       navItem.links?.map((link,i) => (
@@ -35,7 +41,7 @@ export default function SideBar(props: {data: SideBarProps[]}){
                       ))
                     }
                    </NavLink>
-                   </Link>
+                </Link>
               ))
       }
       </ScrollArea>

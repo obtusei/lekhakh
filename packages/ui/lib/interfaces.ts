@@ -57,9 +57,11 @@ export interface IUser{
   bio:string,
   image:string,
   role:string,
-  blogsCount?:number,
-  followers?:number,
-  following?:number
+  _count?: {
+      blogs:number,
+      followers:number,
+      following: number
+    },
   blogs?:IBlog[]
 }
 

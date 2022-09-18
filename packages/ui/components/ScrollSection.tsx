@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { createStyles,Group, ScrollArea,Button, Stack, Title } from '@mantine/core'
+import { createStyles,Group, ScrollArea,Button, Stack, Title, ActionIcon } from '@mantine/core'
 import { IconChevronDownRight, IconChevronRight } from '@tabler/icons'
 import { useRouter } from 'next/router';
 
@@ -13,16 +13,15 @@ interface Props{
   children: ReactNode,
   title:string,
   href:string
-  seeMore:string
 }
-function ScrollSection({children,title,href,seeMore}:Props) {
+function ScrollSection({children,title,href}:Props) {
           const {classes} = useStyles()
           const router = useRouter();
   return (
     <div>
           <Group style={{justifyContent:"space-between"}}>
                     <Title order={4}>{title}</Title>
-                    <Button size='sm' variant='white' rightIcon={<IconChevronRight/>} onClick={() => router.push(`/${href}`)}>{seeMore}</Button>
+                    <ActionIcon aria-label='See More' onClick={() => router.push(`/${href}`)}><IconChevronRight/></ActionIcon>
           </Group>
           
                    <ScrollArea classNames={{scrollbar:classes.scrollbar}}  style={{ width: "100%",padding:"20px"}}>

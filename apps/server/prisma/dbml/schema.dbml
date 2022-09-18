@@ -6,10 +6,9 @@ Table User {
   id String [pk]
   name String [not null]
   email String [unique, not null]
-  emailVerified DateTime
+  emailVerified Boolean [not null, default: false]
   isVerifiedUser Boolean [not null, default: false]
   isWriter Boolean [not null, default: false]
-  isPublicAccount Boolean [not null, default: true]
   dateOfBirth DateTime
   username String [unique, not null]
   password String [not null]
@@ -63,7 +62,7 @@ Table Tag {
 
 Table Category {
   id String [pk]
-  name String [not null]
+  name String [unique, not null]
   blogs Blog [not null]
 }
 

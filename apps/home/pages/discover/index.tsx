@@ -9,26 +9,28 @@ import useTranslation from 'next-translate/useTranslation'
 import { GetSession } from '../../api/user'
 import { GetDiscoverBlogs } from '../../api/blog'
 import { IBlog } from 'ui/lib/interfaces'
+import { ErrorSection, LoadingSection } from '../../components/ErrorAndLoading'
 
 function Discover() {
   const router = useRouter();
   const {t} = useTranslation();
   const {session} = GetSession();
-  const {discoverData} = GetDiscoverBlogs();
+  const {discoverData,isLoading,isError} = GetDiscoverBlogs();
   return (
     <Layout>
           <Title>{t('common:discover')}</Title>
           <br />
           {
-            discoverData && discoverData.map((cat) => (
-              <ScrollSection title={cat.name} href={`/category/${cat.name.toLowerCase()}`} seeMore={t('common:seeMore')}>
+            isLoading ? <LoadingSection/>: isError ? <ErrorSection/> : (
+            discoverData.map((cat) => (
+              <ScrollSection title={cat.name} href={`/category/${cat.name.toLowerCase()}`}>
                 {
                   cat.blogs.map((blog:IBlog) => (
                     <BlogCard props={blog} session={session}/>
                   ))
                 }
                 </ScrollSection>
-            ))
+            )))
           }
     </Layout>
   )
