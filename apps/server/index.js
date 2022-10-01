@@ -4,6 +4,7 @@ const writer =  require("./routes/user/writer.router.js")
 const auth = require("./routes/auth/auth.route.js")
 const blog = require("./routes/blog/blog.route.js")
 const verify = require("./routes/email/verfiy.route.js")
+const report = require("./routes/shared/report.route.js")
 //ADMIN
 const adminUsers = require("./routes/admin/users.route.js")
 const adminCategories = require("./routes/admin/category.route.js")
@@ -38,7 +39,7 @@ const store = new PrismaSessionStore(
 
 app.use(express.json())
 app.use(cors({
-  origin:"http://localhost:3000",
+  origin:["http://localhost:3000","http://localhost:3001"],
   credentials:true
 }))
 app.use(express.urlencoded({ extended: true }));
@@ -97,6 +98,7 @@ app.use('/blog',blog)
 app.use("/auth",auth)
 app.use("/verify",verify)
 app.use("/writer",writer)
+app.use("/report",report)
 //ADMIN
 app.use("/admin/users",adminUsers)
 app.use("/admin/categories",adminCategories)

@@ -9,7 +9,7 @@ interface ShellProps {
   children: React.ReactNode;
   isNavHidden?: boolean;
   sideBardata: SideBarProps[];
-  navData:NavData;
+  navData?:NavData;
   session?:any,
   isLoading?:boolean,
 }

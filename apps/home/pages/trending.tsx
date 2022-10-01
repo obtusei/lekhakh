@@ -35,22 +35,7 @@ export default function Trending() {
             }
           </ScrollSection>
           <br />
-          <ScrollSection title={t("common:trendsoftheday")} href='/trend'>
-            {
-              trendoftheday ? trendoftheday.map((blog,index) => (
-                <CarouselCard 
-                  image='https://images.unsplash.com/photo-1475113548554-5a36f1f523d6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80' 
-                  title='Love' 
-                  category='Poem'
-                  readMore={
-                    () => router.push(`/blog/${blog.id}`)
-                  }
-                  />
-              )):
-              trendDayLoading ? <LoadingSection/>:<ErrorSection/>
-            }
-          </ScrollSection>
-          <br />
+          
           <Title order={4}>{t('common:trends')}</Title>
           <br />
           <Grid grow>

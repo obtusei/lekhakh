@@ -119,6 +119,16 @@ Table Newsletter {
   createdAt DateTime [default: `now()`, not null]
 }
 
+Table MailService {
+  id String [pk]
+  name String [not null]
+  email String [not null]
+  title String
+  message String
+  postedAt DateTime [default: `now()`, not null]
+  type ServiceType [not null]
+}
+
 Table BlogToTag {
   tagId String [ref: > Tag.id]
   blogsId String [ref: > Blog.id]
@@ -127,6 +137,11 @@ Table BlogToTag {
 Enum Role {
   ADMIN
   USER
+}
+
+Enum ServiceType {
+  REPORT
+  FEEDBACK
 }
 
 Ref: Follows.followerId > User.id

@@ -60,14 +60,14 @@ export const NAVDATA:SideBarProps[] = [
   
 ];
 
-export const ADMIN_NAVDATA = [
-  { label: 'Dashboard', icon: IconSmartHome,href:"/"},
-  { label: 'Users', icon: IconUsers,href:"/users"},
-  { label: 'Blogs', icon: IconArchive,href:"/blogs"},
-  { label: 'Categories', icon: IconGridDots,href:"/categories"},
-  { label: 'Tags', icon: IconHash,href:"/tags"},
-  { label: 'Roles', icon: IconAffiliate,href:"/roles"},
-  { label: 'View Code', icon: IconCode,href:"/code"},
-  { label: 'Feedbacks', icon: IconMessage2,href:"/feedback"},
-  { label: 'Reports', icon: IconBug,href:"/reports"},
+export const ADMIN_NAVDATA:SideBarProps[] = [
+  { label: 'Dashboard', icon: HashtagIcon,href:"/"},
+  { label: 'Users', icon: HashtagIcon,href:"/users"},
+  { label: 'Blogs', icon: HashtagIcon,href:"/blogs"},
+  { label: 'Categories', icon: HashtagIcon,href:"/categories"},
+  { label: 'Tags', icon: HashtagIcon,href:"/tags"},
+  { label: 'Roles', icon: HashtagIcon,href:"/roles"},
+  { label: 'View Code', icon: HashtagIcon,href:"/code"},
+  { label: 'Feedbacks', icon: HashtagIcon,href:"/feedback"},
+  { label: 'Reports', icon: HashtagIcon,href:"/reports"},
 ]

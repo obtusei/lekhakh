@@ -19,6 +19,11 @@ enum Role {
   USER
 }
 
+enum ServiceType {
+  REPORT
+  FEEDBACK
+}
+
 model User {
   id             String            @id @default(cuid())
   name           String
@@ -132,4 +137,14 @@ model Newsletter {
   id        String   @id @default(cuid())
   email     String   @unique
   createdAt DateTime @default(now())
+}
+
+model MailService {
+  id       String      @id @default(cuid())
+  name     String
+  email    String
+  title    String?
+  message  String?
+  postedAt DateTime    @default(now())
+  type     ServiceType
 }

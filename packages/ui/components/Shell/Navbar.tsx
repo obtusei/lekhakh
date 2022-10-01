@@ -8,8 +8,8 @@ import { ColorModeAndLocale } from '../LowerMenu';
 import TopAlert from '../TopAlert';
 
 export default function Navbar({navData,session,isLoading}: {navData:NavData,session?:any,isLoading?:boolean}) {
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
-  const dark = colorScheme === 'dark';
+  
+  
   
   function getInitial(name:string){
     let initial:string;

@@ -29,6 +29,7 @@ export * from "./components/Cards/Carousel";
 export * from "./components/Cards/CircleCard";
 export * from "./components/Cards/WriterCard";
 export * from "./components/Profile/ProfileCard";
+export * from "./components/Cards/SimpleCard"
 export * from "./components/Hero"
 export * from "./components/ScrollSection"
 export * from "./lib/spotlight"
