@@ -76,7 +76,7 @@ model Blog {
 
 model Tag {
   id    String @id @default(cuid())
-  name  String
+  name  String @unique
   blogs Blog[]
 }
 

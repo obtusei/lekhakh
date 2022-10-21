@@ -1,10 +1,12 @@
 const express = require("express")
+const path = require("path")
 const user =  require("./routes/user/user.route.js")
 const writer =  require("./routes/user/writer.router.js")
 const auth = require("./routes/auth/auth.route.js")
 const blog = require("./routes/blog/blog.route.js")
 const verify = require("./routes/email/verfiy.route.js")
 const report = require("./routes/shared/report.route.js")
+const uploadImage = require("./routes/upload.route.js")
 //ADMIN
 const adminUsers = require("./routes/admin/users.route.js")
 const adminCategories = require("./routes/admin/category.route.js")
@@ -56,7 +58,7 @@ app.use(session(
           }
           }
 ))
-
+app.use("/profile",express.static(path.join(__dirname, `upload/avatar`)))
 
 passport.use(strategy);
 
@@ -99,6 +101,7 @@ app.use("/auth",auth)
 app.use("/verify",verify)
 app.use("/writer",writer)
 app.use("/report",report)
+app.use("/image",uploadImage)
 //ADMIN
 app.use("/admin/users",adminUsers)
 app.use("/admin/categories",adminCategories)

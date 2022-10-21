@@ -20,6 +20,30 @@ category.get("/", async (req,res) => {
   }
 })
 
+category.get("/:name", async (req,res) => {
+  try{
+    const categories = await prisma.category.findUnique({
+      where:{
+        name:req.params.name
+      },
+      include:{
+        blogs:{
+          include:{
+            category:true,
+            tag:true,
+            user:true
+          }
+        }
+      }
+    })
+    
+    res.status(200).json(categories)
+  }
+  catch{
+    res.status(404).send("ERROR")
+  }
+})
+
 category.post("/",async (req,res) => {
   try{
     const newCategory = await prisma.category.create({

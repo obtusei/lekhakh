@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { Divider, Stack, NavLink, Title, Group, Grid, Center} from "ui";
+import { Divider, Stack, NavLink, Title, Group, Grid, Center, Text} from "ui";
 import BlogCard from "ui/components/Cards/BlogCard";
 import CustomChip from "ui/components/CustomChip";
 import Hero from "ui/components/Hero";
@@ -12,8 +11,25 @@ import { GetSession, GetTags } from "../api/user";
 import { GetTopBlogs, GetTrendingBlogs } from "../api/blog";
 import { ITag } from "ui/lib/interfaces";
 import { ErrorSection,LoadingSection } from "../components/ErrorAndLoading";
+import Card from "../components/Card";
+import axios from "axios";
+import safeJsonStringify from "safe-json-stringify";
 
-export default function Web() {
+export async function getServerSideProps () {
+  // `getStaticProps` is executed on the server side.
+  axios.defaults.withCredentials = true
+  const res = await axios.get('/auth/info',{withCredentials:true})
+  const session = await res.data
+  const headers = res.headers
+  return {
+    props: {
+      user:session,
+      headers:headers
+    }
+  }
+}
+
+export default function Web({user,headers}) {
   const {t} = useTranslation();
   const heroData = {
     title:[t('common:heroTitle'),t('common:heroTitle2')],
@@ -21,6 +37,7 @@ export default function Web() {
     description:t('common:heroDes'),
     buttonText:[t('common:startReading'),t('common:startWriting')]
   }
+
   const data = {title:heroData.title[0],subtitle:heroData.subtitle,description:heroData.description,buttonText:heroData.buttonText[0]}
   const {session} = GetSession()
   const {trendData,isLoading:trendLoading} = GetTrendingBlogs();
@@ -30,9 +47,10 @@ export default function Web() {
   return (
     <>
       <Layout isNavHidden={true}>
+        
         {/* HERO SECTION */}
         <Hero {...data}/><br />
-        
+        <Text>JSON:{JSON.stringify(user)}</Text>
         <Divider/><br />
 
         {/* TRENDING SECTION */}
@@ -44,7 +62,8 @@ export default function Web() {
           {
             trendData ? trendData.map((trend,index) => (
               <Grid.Col span={4} key={index}>
-                <BlogCard props={trend} session={session} isSmall={true} index={index}/>,
+                {/* <BlogCard props={trend} session={session} isSmall={true} index={index}/>, */}
+                <Card blog={trend} isSmall={true} index={index}/>
               </Grid.Col>
             )):
             trendLoading ? <LoadingSection/>:<ErrorSection/>
@@ -65,7 +84,8 @@ export default function Web() {
             <Stack>
               {
                 topData ? topData.map((blog,index) => (
-                  <BlogCard props={blog} session={session}/>
+                  // <BlogCard props={blog} session={session}/>
+                  <Card blog={blog}/>
                 )):
                 topLoading ? <LoadingSection/>:<ErrorSection/>
               }

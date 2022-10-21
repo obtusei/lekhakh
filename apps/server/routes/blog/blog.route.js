@@ -1,7 +1,7 @@
 const blog = require('express').Router();
 const { isAuth } = require('../../controllers/auth/authMiddleware.js');
 const { createBlog, specificBlog, trendingBlog, followingBlog, usersBlog, discoverBlog, searchBlog, topBlog, trendoftheday, getSpecificCat } = require("../../controllers/blog/blog.controller.js")
-const { likeABlog, commentOnBlog, deleteALike, deleteComment, saveABlog, deleteASave } = require("../../controllers/blog/likeComment.controller.js");
+const { likeABlog, commentOnBlog, deleteALike, deleteComment, saveABlog, deleteASave, isBloggedLikeBySessionUser, ifLikeExist, ifSaveExist, isBloggedSaveBySessionUser, getComments } = require("../../controllers/blog/likeComment.controller.js");
 const prisma = require('../../prisma/prisma.js');
 /* -------------------------------------------------------------------------- */
 /*                                 GET REQUEST                                */
@@ -17,6 +17,11 @@ blog.get("/trending", trendingBlog);
 blog.get("/following", isAuth, followingBlog)
 //Search
 blog.get("/search",searchBlog);
+//Is Liked
+blog.get("/isLiked/:id",isBloggedLikeBySessionUser)
+blog.get("/isSaved/:id",isBloggedSaveBySessionUser)
+//Get Comment
+blog.get("/comment/:id",getComments)
 //Category
 blog.get("/category/:name",getSpecificCat);
 /* -------------------------------------------------------------------------- */
@@ -25,9 +30,10 @@ blog.get("/category/:name",getSpecificCat);
 
 blog.post("/create", isAuth, createBlog);
 
-blog.post("/like", likeABlog)
-blog.post("/comment", commentOnBlog);
-blog.post("/save", saveABlog)
+blog.post("/like",isAuth,ifLikeExist,likeABlog)
+blog.post("/comment",isAuth,commentOnBlog);
+blog.post("/save",isAuth,ifSaveExist,saveABlog);
+
 
 
 /* -------------------------------------------------------------------------- */
@@ -35,7 +41,7 @@ blog.post("/save", saveABlog)
 /* -------------------------------------------------------------------------- */
 
 blog.delete("/like", deleteALike)
-blog.delete("/comment", deleteComment)
+blog.delete("/comment/:id", deleteComment)
 blog.delete("/save", deleteASave)
 
 blog.get("/:id", specificBlog);

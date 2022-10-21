@@ -1,7 +1,7 @@
 const user = require('express').Router();
 const { session } = require('passport');
 const passport = require("passport");
-const { userAll,blogs,follower,createUser, savedBlogs, liked, following } =  require("../../controllers/user/user.controller.js")
+const { userAll,blogs,follower,createUser, savedBlogs, liked, following, allUser, searchUser, followingSpecific, doesUsernameExist, doesUserEmailExist } =  require("../../controllers/user/user.controller.js")
 const {isAuth,isAdmin} = require('../../controllers/auth/authMiddleware.js')
 const {follow, unfollow} = require('../../controllers/user/userPut.controller.js')
 const prisma = require("../../prisma/prisma.js");
@@ -10,6 +10,7 @@ const prisma = require("../../prisma/prisma.js");
 /*                                 GET REQUEST                                */
 /* -------------------------------------------------------------------------- */
 
+user.get("/",allUser)
 user.get('/protected',isAuth, (req, res, next) => {
     res.send('You are logged in <br> <a href="/auth/logout">Logout</a>');
 });
@@ -30,7 +31,8 @@ user.get("/count", (req,res) => {
     }
     res.send("You have visited this page " + req.session.viewcount + " times");
 })
-
+user.get("/exist/username/:username",doesUsernameExist)
+user.get("/exist/email/:email",doesUserEmailExist)
 //user's saved blogs
 user.get("/saved",isAuth,savedBlogs);
 //user's liked blogs
@@ -41,7 +43,9 @@ user.get("/commented",isAuth,liked);
 user.get("/followers",isAuth,follower);
 //user's Following
 user.get("/following",isAuth,following);
-
+user.get("/following/:id",isAuth,followingSpecific);
+//search
+user.get("/search",searchUser)
 /* -------------------------------------------------------------------------- */
 /*                                POST REQUEST                                */
 /* -------------------------------------------------------------------------- */
@@ -53,7 +57,7 @@ user.post("/follow",isAuth,follow);
 /*                               DELETE REQUEST                               */
 /* -------------------------------------------------------------------------- */
 
-user.delete("/follow",isAuth,unfollow);
+user.delete("/follow/:user",isAuth,unfollow);
 
 /* -------------------------------------------------------------------------- */
 /*                                   Dyanimc                                  */

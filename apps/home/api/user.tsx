@@ -1,7 +1,8 @@
 import useSWR,{mutate} from "swr"
 import axios from "axios"
+import { IUser } from "ui/lib/interfaces"
 
-interface RegisterProps{
+interface SignUpProps{
   name?:string,
   email:string,
   username?:string,
@@ -10,24 +11,56 @@ interface RegisterProps{
 
 const fetcher = (url:any) => axios.get(url,{withCredentials:true}).then(res => res.data)
 
-// export async function RegisterTheUser({name,email,username,password}:RegisterProps){
-//   try{
-//     const register = await axios.post("/auth/register",{name,email,username,password})
-//   }
-//   catch{
-//     console.log("ERROR registering the new user")
-//   }
-// }
+export async function registerTheUser({name,email,username,password}:SignUpProps){
+  try{
+    await axios.post("/auth/register",{name,email,username,password},{withCredentials:true})
+  }
+  catch{
+    console.log("Error while registering the new user")
+  }
+}
 
-// export async function LoginTheUser({email,password}){
-//   try{
-//     const login = await axios.post("/auth/login",{email,password})
-//     console.log(login)
-//   }
-//   catch{
-//     console.log("ERROR login")
-//   }
-// }
+export async function loginTheUser({email,password}:SignUpProps){
+  try{
+    await axios.post("/auth/login",{email,password},{withCredentials:true})
+  }
+  catch{
+    console.log("Error while login")
+  }
+}
+
+export async function createBlogByUser({ title,content,category,tags }: any) {
+  try {
+    const createBlog = await axios.post("/blog/create", { title, content, category, tags }, { withCredentials: true })
+    console.log(createBlog.data)
+  }
+  catch {
+    console.log("ERROR creating the blog")
+  }
+}
+
+export async function followSomeone(userData:IUser,doesFollow:any){
+  try{
+      const data = {user:userData.username}
+      if (doesFollow?.data?.doesFollow){
+        axios.delete(`/user/follow/${data.user}`,{withCredentials:true})
+        .then((res) => {
+          mutate(`/user/following/${userData.id}`)
+          mutate("/user/" + data.user)
+        }).catch((err) => console.log("Error while unfollowing"))
+      }else{
+        
+        axios.post('/user/follow',data,{withCredentials:true})
+        .then((res) => {
+          mutate(`/user/following/${userData.id}`)
+          mutate("/user/" + data.user)
+        }).catch((err) => console.log("Error while following"))
+      }
+    }
+    catch{
+      console.log("Error while handling the following");
+    }
+}
 
 //  "user": {
 //     "id": "cl67s18dk0000cuxks9frcd44",
@@ -57,8 +90,36 @@ export function GetSession () {
 
 export function GetUserbyUsername(username:string) { 
   const { data,error } = useSWR(`/user/${username}`,fetcher)
+  // const { data,error } = useSWR(['user',username], fetcher)
   return {
-    session: data,
+    userData: data,
+    isLoading: !error && !data,
+    isError: error
+  }
+}
+
+export function GetUserFollowers(){
+  const {data,error} = useSWR('/user/followers',fetcher)
+  return {
+    followers: data,
+    isLoading: !error && !data,
+    isError: error
+  }
+}
+
+export function GetUserFollowing(){
+  const {data,error} = useSWR('/user/following',fetcher)
+  return {
+    following: data,
+    isLoading: !error && !data,
+    isError: error
+  }
+}
+
+export function GetUserSaved(){
+  const {data,error} = useSWR('/user/saved',fetcher)
+  return {
+    data: data,
     isLoading: !error && !data,
     isError: error
   }
@@ -74,8 +135,17 @@ export function GetCategories () {
   }
 }
 
-export function GetTags () {
-  const { data,error } = useSWR('/admin/tags')
+export function GetTags (take:number = 100) {
+  const { data,error } = useSWR(`/admin/tags?take=${take}`)
+  return {
+    tags: data,
+    isLoading: !error && !data,
+    isError: error
+  }
+}
+
+export function SearchTag(term:string) {
+  const { data,error } = useSWR(`/admin/tags/search/${term}`)
   return {
     tags: data,
     isLoading: !error && !data,
@@ -97,6 +167,42 @@ export function GetSpotlightAction () {
   const { data,error } = useSWR('/admin/tags')
   return {
     tags: data,
+    isLoading: !error && !data,
+    isError: error
+  }
+}
+
+export function SearchUsers(query:string){
+  const {data,error} =useSWR(`/user/search?q=${query}`,fetcher)
+  return{
+    data:data,
+    isLoading: !error && !data,
+    isError: error
+  }
+}
+
+export function DoesFollow(userId:string){
+  const {data,error} = useSWR(`/user/following/${userId}`,fetcher)
+  return{
+    data:data,
+    isLoading: !error && !data,
+    isError: error
+  }
+}
+
+export function DoesUsernameExist(username:string){
+  const {data,error} = useSWR(`/user/exist/username/${username}`,fetcher)
+  return{
+    data:data,
+    isLoading: !error && !data,
+    isError: error
+  }
+}
+
+export function DoesUserEmailExist(email:string){
+  const {data,error} = useSWR(`/user/exist/email/${email}`,fetcher)
+  return{
+    data:data,
     isLoading: !error && !data,
     isError: error
   }

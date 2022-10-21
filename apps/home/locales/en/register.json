@@ -12,7 +12,7 @@
       "passwordRequired":"Password is required",
       "usernameAlreadyExists":"Username already exists",
       "usernameIsAvailable":"Username is available",
-      "passwordIsNotMatch":"Password is not match",
+      "passwordIsNotMatch":"Passwords do not match",
       "emailRequired":"Email is required",
       "emailIsNotValid":"Email is not valid",
       "emailAlreadyExists":"Email already exists",
@@ -29,6 +29,21 @@
       "signup":"Sign Up",
       "rememberMe":"Remember me",
       "forgotPassword":"Forgot Password ?",
-      "beOne":"Be One"
-
+      "beOne":"Be One",
+      "successRegister":"Successfully registered",
+      "successLog":"Successfully logged in",
+      "pname":"John Doe",
+      "pusername":"example",
+      "pemail":"example@example.com",
+      "fillName":"Please fill name field",
+      "fillEmail":"Please provide a valid email",
+      "fillUsername":"Please fill username field",
+      "fillPassword":"Please fill password field",
+      "settings":"Settings",
+      "changeProfile":"Change Profile",
+      "bio":"Your Bio",
+      "dob":"Date of birth",
+      "pickDate":"Pick date",
+      "changePassword":"Change Password",
+      "save":"Save changes"
 }

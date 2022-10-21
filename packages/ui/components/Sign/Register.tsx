@@ -1,33 +1,14 @@
 import { useForm } from '@mantine/form';
-import { TextInput, Button,PasswordInput, Alert,Stack, Text, NavLink, Title, Group, Loader } from '@mantine/core';
+import { TextInput, Button,PasswordInput, Alert,Stack, Text, Title, Group, Loader } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
-import Link from 'next/link';
 import Href from '../Link';
 
 export interface RegisterProps {
   onSubmit: (values: any) => void;
   loading: boolean;
-  stringData:RegisterStringProps
+  stringData:any
+  // doesEmailExist: (email:string) => boolean
 }
-
-export interface RegisterStringProps {
-    title:string,
-    subTitle:String,
-    name?:string,
-    username?:string,
-    email:string,
-    password:string,
-    confirmPassword?:string,
-    button:string,
-    footer:string,
-    subFooter:string,
-    nameRequired?:string,
-    usernameRequired?:string,
-    emailRequired?:string,
-    passwordRequired?:string,
-    confirmPasswordRequired?:string
-  }
-
 
 export default function Register({ onSubmit,loading,stringData}: RegisterProps) {
   const form = useForm({
@@ -35,7 +16,7 @@ export default function Register({ onSubmit,loading,stringData}: RegisterProps) 
     validate: {
       name: (value) => (value.length < 2 ? stringData.nameRequired : null),
       email: (value) => (/^\S+@\S+$/.test(value) ? null : stringData.emailRequired),
-      username: (value) => (value.length < 2 ? stringData.usernameRequired : null),
+      username: (value) => (value.length < 2 ? stringData.usernameRequired :null),
       password: (value) => (value.length < 6 ? stringData.passwordRequired : null),
       confirmPassword: (value,values) => (value !== values.password ? stringData.confirmPasswordRequired : null),
     },
@@ -43,16 +24,16 @@ export default function Register({ onSubmit,loading,stringData}: RegisterProps) 
 
   const handleError = (errors: typeof form.errors) => {
     if (errors.name) {
-      showNotification({ message: 'Please fill name field', color: 'red' });
+      showNotification({ message: stringData.fillName, color: 'red' });
     } else if (errors.email) {
-      showNotification({ message: 'Please provide a valid email', color: 'red' });
+      showNotification({ message: stringData.fillEmail, color: 'red' });
     }else if (errors.username) {
-      showNotification({ message: 'Please fill username field', color: 'red' });
+      showNotification({ message: stringData.fillUsername, color: 'red' });
     }else if (errors.password) {
-      showNotification({ message: 'Please fill password field', color: 'red' });
+      showNotification({ message: stringData.fillPassword, color: 'red' });
     }
     else if (errors.confirmPassword){
-      showNotification({ message: 'Passwords must match', color: 'red' });
+      showNotification({ message: stringData.passwordIsNotMatch, color: 'red' });
     }
   };
 
@@ -67,13 +48,13 @@ export default function Register({ onSubmit,loading,stringData}: RegisterProps) 
         <Stack style={{width:"100%"}} spacing={0}>
           <Title>{stringData.title}</Title>
           <Text color={"dimmed"}>{stringData.subTitle}</Text>
-          <TextInput mt={"lg"}  label={stringData.name} placeholder="Name" {...form.getInputProps('name')} size="md" variant="filled"/>
-          <TextInput mt={"sm"} label={stringData.username} placeholder="Username" {...form.getInputProps('username')} size="md" variant="filled"/>
-          <TextInput mt={"sm"}  label={stringData.email} placeholder="Email" {...form.getInputProps('email')} size="md" variant="filled"/>
+          <TextInput mt={"lg"}  label={stringData.name} placeholder={stringData.pname} {...form.getInputProps('name')} size="md" variant="filled"/>
+          <TextInput mt={"sm"} label={stringData.username} placeholder={stringData.pusername} {...form.getInputProps('username')} size="md" variant="filled"/>
+          <TextInput mt={"sm"}  label={stringData.email} placeholder={stringData.pemail} {...form.getInputProps('email')} size="md" variant="filled"/>
           <PasswordInput
               mt={"sm"} 
               label={stringData.password}
-              placeholder="Password"
+              placeholder={stringData.ppassword}
               {...form.getInputProps('password')}
               size="md"
               variant="filled"
@@ -82,7 +63,7 @@ export default function Register({ onSubmit,loading,stringData}: RegisterProps) 
             <PasswordInput
               mt={"sm"} 
               label={stringData.confirmPassword}
-              placeholder="Confirm password"
+              placeholder={stringData.pcpassword}
               {...form.getInputProps('confirmPassword')}
               size="md"
               variant="filled"

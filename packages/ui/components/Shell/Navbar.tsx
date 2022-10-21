@@ -1,30 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Header,Stack,ActionIcon,Button,useMantineColorScheme, Menu, Text, UnstyledButton, Avatar, Group, Input, Code, MediaQuery, Select} from '@mantine/core'
-import { SunIcon,MoonIcon, TickIcon } from '../../Icons'
 import { IconArrowBarRight, IconBookmark, IconBug, IconChevronDown, IconMessage, IconSearch, IconSettings, IconUser } from '@tabler/icons';
 import { LogoLink } from '../StateButtons';
 import { NavData } from '../../lib/interfaces';
 import { ColorModeAndLocale } from '../LowerMenu';
-import TopAlert from '../TopAlert';
+import { getInitial } from '../../lib/logics';
+import {useRouter} from "next/router"
 
 export default function Navbar({navData,session,isLoading}: {navData:NavData,session?:any,isLoading?:boolean}) {
-  
-  
-  
-  function getInitial(name:string){
-    let initial:string;
-    if (name){
-      if (name.includes(' ')){
-        const fullName = name.split(' ');
-        initial = fullName[0].charAt(0).toUpperCase() + fullName[1].charAt(0).toUpperCase();
-      }else{
-        initial = name.charAt(0).toUpperCase();
-      }
-      return initial;
-    }
-    return null
-  }
-
+  const router = useRouter();
+  const [search,setSearch] = useState("")
   return (
     <Header height={70} p="md" style={{border:"none"}}>
           <div style={{ display: 'flex', alignItems: 'center', height: '100%',justifyContent:"space-between"}}>
@@ -37,11 +22,17 @@ export default function Navbar({navData,session,isLoading}: {navData:NavData,ses
                   <Stack style={{flexDirection:"row",alignItems:"center"}}>
                   {/* <MediaQuery smallerThan={"md"} styles={{display:"none"}}> */}
                     <ColorModeAndLocale/>
-                    <Input placeholder='Search' rightSection={<Code>/</Code>} variant="filled"/>
+                    <Input placeholder='Search' rightSection={<Code>/</Code>} value={search} variant="filled" onKeyDown={(e) => {
+                      if (e.key == "Enter"){
+                        router.push(`/search?q=${search}`)
+                      }
+                    }} onChange={(e) => setSearch(e.target.value)}/>
                   {/* </MediaQuery> */}
                 {
                   session ? (
-                    <Menu>
+                  <>
+                  <Button onClick={() => router.push("/blog/create")}>Create</Button>
+                  <Menu>
                   <Menu.Target>
                     <UnstyledButton>
                       <Group>
@@ -54,9 +45,9 @@ export default function Navbar({navData,session,isLoading}: {navData:NavData,ses
                     </UnstyledButton>
                   </Menu.Target>
                   <Menu.Dropdown>
-                    <Menu.Item icon={<IconUser size={14} />}>{navData.account}</Menu.Item>
-                    <Menu.Item icon={<IconSettings size={14} />}>{navData.settings}</Menu.Item>
-                    <Menu.Item icon={<IconBookmark size={14} />}>{navData.saved}</Menu.Item>
+                    <Menu.Item icon={<IconUser size={14} />} onClick={() => router.push(`/${session.username}`)}>{navData.account}</Menu.Item>
+                    <Menu.Item icon={<IconSettings size={14} />} onClick={() => router.push("/settings")}>{navData.settings}</Menu.Item>
+                    <Menu.Item icon={<IconBookmark size={14} />} onClick={() => router.push("/saved")}>{navData.saved}</Menu.Item>
                     <Menu.Item
                       icon={<IconSearch size={14} />}
                       rightSection={<Text size="xs" color="dimmed">⌘K</Text>}
@@ -65,11 +56,12 @@ export default function Navbar({navData,session,isLoading}: {navData:NavData,ses
                     </Menu.Item>
 
                     <Menu.Divider />
-                    <Menu.Item icon={<IconBug size={14} />}>{navData.reportBugs}</Menu.Item>
-                    <Menu.Item icon={<IconMessage size={14} />}>{navData.feedback}</Menu.Item>
-                    <Menu.Item icon={<IconArrowBarRight size={14} />}>{navData.logout}</Menu.Item>
+                    <Menu.Item icon={<IconBug size={14} />} onClick={() => router.push("/report")}>{navData.reportBugs}</Menu.Item>
+                    <Menu.Item icon={<IconMessage size={14} />} onClick={() => router.push("/feedback")}>{navData.feedback}</Menu.Item>
+                    <Menu.Item icon={<IconArrowBarRight size={14} />} onClick={() => router.push("/logout")}>{navData.logout}</Menu.Item>
                   </Menu.Dropdown>
                 </Menu>
+                </>
                   ):
                   (
                     <Group>

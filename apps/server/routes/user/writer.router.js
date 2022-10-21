@@ -48,19 +48,62 @@ writer.get("/hot",async (req,res) => {
   }
 })
 
-writer.get("/cat",async (req,res) => {
+writer.get("/category",async (req,res) => {
   try{
     const users = await prisma.category.findMany({
         include:{
           blogs:{
             select:{
-              user:true
+              user:{
+                include:{
+                  _count: {
+                  select: { 
+                        blogs: true,
+                        followers:true,
+                        following:true
+                  },
+            }     
+                }
+              }
             }
           }
         }
         
     })
     ///const writers = users.filter((user) => { return user.isWriter === true})
+    const writers = users.filter((user) => { return user.blogs.length != 0})
+    res.json(writers)
+  }
+  catch{
+    console.log("ERROR")
+  }
+})
+
+writer.get("/category/:name",async (req,res) => {
+  try{
+    const users = await prisma.category.findUnique({
+        where:{
+          name:req.params.name
+        },
+        include:{
+          blogs:{
+            select:{
+              user:{
+                include:{
+                  _count: {
+                  select: { 
+                        blogs: true,
+                        followers:true,
+                        following:true
+                  },
+            }     
+                }
+              }
+            }
+          }
+        }
+        
+    })
     res.json(users)
   }
   catch{

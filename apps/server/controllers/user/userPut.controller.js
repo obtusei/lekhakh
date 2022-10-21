@@ -21,7 +21,7 @@ const follow = async (req,res) => {
           try{
                     const userToFollow = await prisma.user.findUnique({
                         where:{
-                              username:"test05"
+                              username:req.body.user
                         }
                     })
                     const userToBeFollowed = await prisma.user.findUnique({
@@ -50,7 +50,7 @@ const unfollow = async (req,res) => {
           try{
                     const userToFollow = await prisma.user.findUnique({
                         where:{
-                              username:"test05"
+                              username:req.params.user
                         }
                     })
                     const userToBeFollowed = await prisma.user.findUnique({
@@ -59,10 +59,20 @@ const unfollow = async (req,res) => {
                         }
                     })
 
-                    const following = await prisma.follows.delete({
-                        data:{
-                              followerId:userToBeFollowed.id,
-                              followingId:userToFollow.id
+                    const following = await prisma.follows.deleteMany({
+                        where:{
+                              AND:[
+                                {
+                                  followerId:{
+                                    equals: userToBeFollowed.id
+                                 },
+                                },
+                                {
+                                  followingId:{
+                                    equals:userToFollow.id
+                                  }
+                                }
+                              ]
                         }
                     });
 
@@ -70,7 +80,7 @@ const unfollow = async (req,res) => {
                   // res.json(userToBeFollowed)
           }
           catch{
-                    console.log("ERORR while following");    
+                    console.log("ERORR while deleting the following");    
           }
 }
 

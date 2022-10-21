@@ -15,9 +15,9 @@ module.exports.createBlog = async (req,res) => {
             }
           },
           tag:{
-            create:data.tags.map(tag => ({
-              name:tag
-            }))
+            create:[{
+              name:"Love"
+            }]
           },
           user:{
             connect:{
@@ -29,7 +29,7 @@ module.exports.createBlog = async (req,res) => {
     );
     res.status(200).json(blog)
   }catch{
-            res.send("ERROR")
+    res.send("ERROR aayo")
   }
 }
 
@@ -37,27 +37,30 @@ module.exports.searchBlog = async (req,res) => {
   try{
       const blogs = await prisma.blog.findMany({
         where:{
-          AND:[
+          OR:[
             {
               title:{
-                search:req.query.q
+                contains:req.query.q
+              }
+            },
+            {
+              content:{
+                contains:req.query.q
               }
             },
             {
               category:{
-                name:req.query.category
+                name:{
+                  contains:req.query.q
+                }
               }
             },
-            {
-              user:{
-                username:req.query.user
-              }
-            }
           ]
         },
         include:{
-            category:true,
-            user:true
+          user:true,
+          category:true,
+          tag:true
         }        
       });
       res.send(blogs)
@@ -225,7 +228,8 @@ module.exports.usersBlog = async (req,res) => {
           blogs:{
             include:{
               category:true,
-              tag:true
+              tag:true,
+              user:true
             }
           },
           
@@ -248,6 +252,7 @@ module.exports.getSpecificCat = async (req,res) => {
           include:{
             user:true,
             tag:true,
+            category:true
           }
         }
       }

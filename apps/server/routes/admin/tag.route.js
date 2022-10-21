@@ -5,6 +5,7 @@ const prisma = require('../../prisma/prisma.js')
 tags.get("/", async (req,res) => {
   try{
     const categories = await prisma.tag.findMany({
+      take:Number(req.query.take || 100),
       include:{
           _count:{
             select:{
@@ -14,6 +15,49 @@ tags.get("/", async (req,res) => {
         }
     })
     res.status(200).json(categories)
+  }
+  catch{
+    res.status(404).send("ERROR")
+  }
+})
+
+tags.get(`/search/:name`,async (req,res) => {
+  try{
+    let payload = req.params.name.trim()
+    const tags = await prisma.tag.findMany({
+      where:{
+        name:{
+          contains:payload
+        }
+      }
+    })
+    res.send(tags)
+  }
+  catch{
+    res.send("ERROR")
+  }
+})
+
+tags.get("/:name", async (req,res) => {
+  try{
+    const tag = await prisma.tag.findUnique({
+      where:{
+        name:req.params.name
+      },
+      include:{
+        blogs:{
+          include:{
+            category:true,
+            tag:true,
+            user:true
+            
+          }
+        }
+      }
+      
+    })
+    
+    res.status(200).json(tag)
   }
   catch{
     res.status(404).send("ERROR")
@@ -82,5 +126,7 @@ tags.put("/",isAuth,isAdmin,async (req,res) => {
     res.status(404).send("Can't update the category")
   }
 })
+
+
 
 module.exports = tags

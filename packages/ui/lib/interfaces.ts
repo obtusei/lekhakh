@@ -9,6 +9,12 @@ export interface HeroProps{
     buttonText:string
 }
 
+export interface IAPI{
+  data: any;
+  isLoading: boolean;
+  isError: any;
+}
+
 export interface NavData{
   login:string,
   register:string,
@@ -36,6 +42,7 @@ export interface IBlog{
 export interface ICategory{
   id:string,
   name:string
+  blogs?:IBlog[]
 }
 
 export interface ITag{

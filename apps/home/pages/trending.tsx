@@ -1,23 +1,16 @@
 import React from 'react'
-import { Divider, Grid, Shell, SimpleGrid, Title } from 'ui'
-import CarouselCard from 'ui/components/Cards/Carousel'
+import { Divider, Grid, Title } from 'ui'
 import CircleCard from 'ui/components/Cards/CircleCard'
-import BlogCard from 'ui/components/Cards/BlogCard'
 import ScrollSection from 'ui/components/ScrollSection'
-import blogData from 'ui/lib/blogData'
 import Layout from '../components/Layout'
 import useTranslation from 'next-translate/useTranslation'
-import { useRouter } from 'next/router'
-import { GetSession } from '../api/user'
-import { GetHotWriters, GetTrendingBlogs, GetTrendofTheDay } from '../api/blog'
+import { GetHotWriters, GetTrendingBlogs} from '../api/blog'
 import { ErrorSection, LoadingSection } from '../components/ErrorAndLoading'
+import Card from '../components/Card'
 
 export default function Trending() {
   const {t} = useTranslation();
-  const router = useRouter();
-  const session = GetSession();
   const {hotWriters,isLoading:hotLoading} = GetHotWriters();
-  const {trendoftheday,isLoading:trendDayLoading} = GetTrendofTheDay();
   const {trendData,isLoading:trendLoading} = GetTrendingBlogs();
   return (
     <Layout>
@@ -27,7 +20,7 @@ export default function Trending() {
           <br />
           <ScrollSection title={t("common:hotWriters")} href='/writers'>
             {
-              hotWriters ? hotWriters.map((writer,index) => (
+              hotWriters ? hotWriters.map((writer,index:number) => (
                 <CircleCard name={writer.name} image={writer.image != null ? writer.image:''} description={`${writer._count?.blogs} blogs`}/>
               )):
               hotLoading ? <LoadingSection/>:<ErrorSection/>
@@ -40,9 +33,9 @@ export default function Trending() {
           <br />
           <Grid grow>
             {
-              trendData ? trendData.map((trend,index) => (
+              trendData ? trendData.map((trend,index:number) => (
                 <Grid.Col span={4} key={index}>
-                <BlogCard props={trend} session={session} isSmall={true} index={index}/>
+                  <Card blog={trend} isSmall index={index+1}/>
               </Grid.Col>
               )):
               trendLoading ? <LoadingSection/>:<ErrorSection/>

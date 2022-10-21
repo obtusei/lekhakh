@@ -33,6 +33,15 @@ export function GetTopBlogs () {
   }
 }
 
+export function GetBlogComments(id:string) { 
+  const { data,error } = useSWR(`/blog/comment/${id}`,fetcher)
+  return {
+    data: data,
+    isLoading: !error && !data,
+    isError: error,
+  }
+}
+
 export function GetDiscoverBlogs () { 
   const { data,error } = useSWR('/blog/discover',fetcher,{revalidateOnFocus:false,refreshInterval:0})
   return {
@@ -47,6 +56,15 @@ export function GetHotWriters () {
   const { data,error } = useSWR<[IUser]>('/writer/hot',fetcher,{revalidateOnFocus:false,refreshInterval:0})
   return {
     hotWriters: data,
+    isLoading: !error && !data,
+    isError: error
+  }
+}
+
+export function GetWriters () { 
+  const { data,error } = useSWR('/writer/category',fetcher,{revalidateOnFocus:false,refreshInterval:0})
+  return {
+    writerData: data,
     isLoading: !error && !data,
     isError: error
   }
@@ -71,7 +89,7 @@ export function GetSpecificBlog(id:string){
 }
 
 export function GetUserBlogs(username:string){
-  const { data,error } = useSWR<IUser>(`/blog/${username}/blogs`,fetcher)
+  const { data,error } = useSWR(`/blog/${username}/blogs`,fetcher)
   return {
     blogData: data,
     isLoading: !error && !data,
@@ -89,3 +107,40 @@ export function GetUserFollowingBlogs(){
 }
 
 
+export function GetCategoryBlogAndWriter(category:string){
+    const {data:writersData,error:writerError} = useSWR(`/writer/category/${category}`,fetcher)
+    const {data:blogs,error} = useSWR(`/blog/category/${category}`,fetcher)
+    return{
+      blogs:blogs,
+      writers:writersData,
+      blogError:error,
+      writerError:writerError
+    }
+}
+
+export function SearchBlogs(query:string){
+  const { data,error } = useSWR<[IBlog]>(`/blog/search?q=${query}`,fetcher)
+  return {
+    data: data,
+    isLoading: !error && !data,
+    isError: error
+  }
+}
+
+export function DoesUserLikeBlog (id:string) { 
+  const { data,error } = useSWR(`/blog/isLiked/${id}`,fetcher)
+  return {
+    data: data,
+    isLoading: !error && !data,
+    isError: error,
+  }
+}
+
+export function DoesUserSaveBlog (id:string) { 
+  const { data,error } = useSWR(`/blog/isSaved/${id}`,fetcher)
+  return {
+    data: data,
+    isLoading: !error && !data,
+    isError: error,
+  }
+}

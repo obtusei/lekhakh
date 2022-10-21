@@ -1,7 +1,9 @@
 import dynamic from "next/dynamic";
 export * from "@mantine/core";
 export * from "@mantine/hooks"
+export * from "@mantine/dates";
 export * from "@mantine/spotlight"
+export * from "@tabler/icons"
 export {NotificationsProvider,showNotification} from "@mantine/notifications"
 export const RichTextEditor =  dynamic(() => import('@mantine/rte'), {
   // Disable during server side rendering

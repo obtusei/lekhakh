@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react'
-import { Shell, useMantineColorScheme } from 'ui'
+import React, { useEffect, useState } from 'react'
+import { Box, CloseButton, Container, Group, Shell, Stack, Text, Title, useMantineColorScheme } from 'ui'
 import { NavData, SideBarProps } from 'ui/lib/interfaces'
 import useTranslation from 'next-translate/useTranslation';
-import { CategoryIcon, DiscoverIcon, FollowingIcon, HashtagIcon, TrendingIcon, WriterIcon } from 'ui/Icons';
+import { CategoryIcon, DiscoverIcon, FollowingIcon, HashtagIcon, SunIcon, TrendingIcon, WriterIcon } from 'ui/Icons';
 import useSWR from 'swr';
 import axios from 'axios';
 import { GetSession } from '../api/user';
@@ -63,11 +63,39 @@ function Layout({children,isNavHidden}:{children:React.ReactNode,isNavHidden?:bo
   })
   return (
    <div>
-      
-     <Shell isNavHidden={isNavHidden} sideBardata={sideBarData}  navData={navData} session={session != null ? session.user : null} isLoading={isLoading}>
+    
+    <Shell isNavHidden={isNavHidden} sideBardata={sideBarData}  navData={navData} session={session != null ? session.user : null} isLoading={isLoading}>
+      {/* {
+        session ? (!session.user?.emailVerified ? <CustomAlert color='#E02020' title='Verify your Email' description='An email for your verification has sent to you.'/>:<></>):<></>
+      } */}
       {children}
     </Shell>
    </div>
+  )
+}
+
+type AlertProps = {
+  color:string,
+  title:string,
+  description:string,
+}
+// "#E02020"
+const CustomAlert = ({color,title,description}:AlertProps) => {
+  const [isHidden,setHidden] = useState(false)
+  return (
+    <>
+    <Box style={{backgroundColor:color,color:"white",width:"100%",borderRadius:"10px",padding:"10px",display:isHidden ? "none":"block"}}>
+        <Group style={{justifyContent:"space-between",paddingLeft:"10px",paddingRight:"10px"}}>
+          <Stack spacing={0}>
+          <Title order={4}>{title}</Title>
+          <Text>{description}</Text>
+        </Stack>
+        {/* <SunIcon/> */}
+        <CloseButton title="Close popover" size="xl" iconSize={20} variant="transparent" style={{color:"white"}} onClick={() => setHidden(true)} />
+        </Group>
+      </Box>
+      <br />
+    </>
   )
 }
 

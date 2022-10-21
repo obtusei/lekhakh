@@ -56,7 +56,7 @@ Table Blog {
 
 Table Tag {
   id String [pk]
-  name String [not null]
+  name String [unique, not null]
   blogs Blog [not null]
 }
 

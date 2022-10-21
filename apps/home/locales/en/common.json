@@ -38,5 +38,17 @@
       "seeMore":"See more",
       "hotWriters":"Hot Writers",
       "trends":"Trends",
-      "fromFollowers":"From {{follower}} followers you have"
+      "fromFollowers":"From {{follower}} followers you have",
+      "error":"Error",
+      "retry":"Retry",
+      "name":"Your name",
+      "username":"Username",
+      "email":"Email",
+      "changeProfile":"Change Profile",
+      "bio":"Your Bio",
+      "dob":"Date of birth",
+      "pickDate":"Pick date",
+      "changePassword":"Change Password",
+      "save":"Save changes",
+      "nothingToShow":"Nothing to show"
 }

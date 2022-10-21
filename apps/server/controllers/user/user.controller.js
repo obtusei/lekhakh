@@ -1,30 +1,40 @@
 const prisma = require("../../prisma/prisma.js");
 const bcrypt = require("bcrypt");
 
+const allUser =async (req,res) => {
+  try{
+    const user = await prisma.user.findMany();
+    res.status(200).json(user)
+  }
+  catch{
+    res.status(404).send("Error while fetching all the users")
+  }
+}
+
 const userAll= async (req,res) => {
-          try{
-                    const user = await prisma.user.findUnique({
-                              where:{
-                                    username:req.params.username
-                              },
-                              include:{
-                                    _count: {
-                                          select: { 
-                                                blogs: true,
-                                                followers:true,
-                                                following:true
-                                          },
-                                    },
-                              }
-                    });
-                    if (!user){
-                        res.status(204).json({message:"User not found"})
-                    }
-                    res.status(200).json(user)
+  try{
+    const user = await prisma.user.findUnique({
+          where:{
+                username:req.params.username
+          },
+          include:{
+                _count: {
+                      select: { 
+                            blogs: true,
+                            followers:true,
+                            following:true
+                      },
+                },
           }
-          catch{
-                res.status(404).json({message:"Error connecting to server"}) 
-          }
+    });
+    if (!user){
+    res.status(204).json({message:"User not found"})
+    }
+    res.status(200).json(user)
+  }
+  catch{
+    res.status(404).json({message:"Error connecting to server"}) 
+  }
 }
 
 const blogs = async (req,res) => {
@@ -95,11 +105,36 @@ const following = async (req,res) => {
       }
 }
 
+const followingSpecific = async (req,res) => {
+      try{
+            const follow = await prisma.follows.findMany({
+              where:{
+                AND:[
+                  {
+                    followerId:{
+                      equals:req.user.id
+                    }
+                  },
+                  {
+                    followingId:{
+                      equals:req.params.id
+                    }
+                  }
+                ] 
+              },
+            })
+            res.status(200).json({doesFollow:follow.length != 0})
+      }
+      catch{
+           res.status(404).json({message:"Error connecting to server"})
+      }
+}
+
 const liked = async (req,res) => {
       try{
             const liked = await prisma.user.findUnique({
                   where:{
-                        username:req.params.username
+                        id:req.user.id
                   },
                   select:{
                         liked:true,
@@ -137,12 +172,11 @@ const commented = async (req,res) => {
 
 const savedBlogs = async (req,res) => {
   try{
-    const savedBlogs = await prisma.user.findUnique({
+    const savedBlogs = await prisma.savedBlogByUser.findMany({
           where:{
-                username:req.params.username
-          },
-          select:{
-                savedBlogs:true,
+               userId:{
+                  equals:req.user.id
+               }
           }
     })
     if (!savedBlogs){
@@ -154,8 +188,6 @@ const savedBlogs = async (req,res) => {
     res.status(404).json({message:"Error connecting to server"})
   }
 }
-
-
 
 const createUser = async (req,res) => {
       try{
@@ -176,17 +208,87 @@ const createUser = async (req,res) => {
       }
 }
 
+const searchUser = async (req,res) => {
+  try{
+    const user = await prisma.user.findMany({
+      where:{
+        OR:[
+          {
+            email:{
+              contains:req.query.q
+            }
+          },
+          {
+            username:{
+              contains:req.query.q
+            }
+          },
+          {
+            name:{
+              contains:req.query.q
+            }
+          }
+        ]
+      }
+    })
+    res.status(200).json(user)
+  }
+  catch{
+    res.status(404).send("Error while searching user")
+  }
+}
 
+const doesUsernameExist = async (req,res) => {
+  try{
+    const find = await prisma.user.findUnique({
+      where:{
+        username:req.params.username
+      }
+    })
 
+    if (find){
+      res.send({userExist:true})
+    }else{
+      res.send({userExist:false})
+    }
+  }
+  catch{
+    res.status(404).send("ERROR aayo")
+  }
+}
+
+const doesUserEmailExist = async (req,res) => {
+  try{
+    const find = await prisma.user.findUnique({
+      where:{
+        email:req.params.email
+      }
+    })
+
+    if (find){
+      res.send({userExist:true})
+    }else{
+      res.send({userExist:false})
+    }
+  }
+  catch{
+    res.status(404).send("ERROR aayo")
+  }
+}
 
 module.exports = {
+      allUser,
       userAll,
       blogs,
       follower,
       following,
+      followingSpecific,
       savedBlogs,
       liked,
       commented,
       createUser,
       // editInfo
+      searchUser,
+      doesUsernameExist,
+      doesUserEmailExist
 }

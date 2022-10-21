@@ -1,53 +1,47 @@
 import axios from 'axios'
+import useTranslation from 'next-translate/useTranslation'
 import React from 'react'
 import useSWR, { useSWRConfig } from 'swr'
 import { Card, Divider, Grid, Title } from 'ui'
 import WriterCard from 'ui/components/Cards/WriterCard'
-import ProfileCard, { UserProfileCardProps, UserProfileCardStringProps } from 'ui/components/Profile/ProfileCard'
+import ProfileCard, { UserProfileCardStringProps } from 'ui/components/Profile/ProfileCard'
+import ScrollSection from 'ui/components/ScrollSection'
+import { ICategory, IUser } from 'ui/lib/interfaces'
+import { GetWriters } from '../api/blog'
+import { ErrorSection, LoadingSection } from '../components/ErrorAndLoading'
 import Layout from '../components/Layout'
 // import { GetCategories,PostCategories } from '../utils/user-api'
 type Props = {}
 
 function Writers({}: Props) {
-  // const {categories} = GetCategories()
-  // const { mutate } = useSWRConfig()
-  // const newCategory = {
-  //   name: 'New Category',
-  // }
-  const user:UserProfileCardProps = {
-    image: "",
-    name: "string",
-    username: "string",
-    bio: "string",
-    blogCount: 0,
-    followerCount: 0,
-    followingCount:20
-  }
+  
+  const {t} = useTranslation()
+  const {writerData,isLoading,isError} = GetWriters()
+  
   const data:UserProfileCardStringProps ={
     blogs: "blogs",
     followers: "followers",
     following: "followings",
     follow: "Follow",
-    contact: "Contact"
   }
   return (
     <Layout>
-      <Title>Writers</Title>
+      <Title>{t('common:writers')}</Title>
       <br />
-      <Divider/>
-      <br />
-      <Grid>
-        {
-          [...Array(10)].map((writer,index) => (
-            <Grid.Col span={4}>
-              <Card shadow={'sm'}>
-                <ProfileCard props={user} stringData={data} hideBio/>
-              </Card>
-            </Grid.Col>
-          ))
-        }
-      </Grid>
-        
+      {
+        isLoading ? <LoadingSection/>: isError ? <ErrorSection/> : (
+        writerData?.map((cat:ICategory) => (
+          <ScrollSection title={cat.name} href={`/category/${cat.name.toLowerCase()}`}>
+            {
+              cat.blogs?.map((user:{user:IUser}) => (
+                <Card shadow={'lg'} withBorder style={{maxWidth:"450px"}}>
+                  <ProfileCard props={user.user} stringData={data}/>
+                </Card>
+              ))
+            }
+            </ScrollSection>
+        )))
+      }
     </Layout>
   )
 }

@@ -2,9 +2,9 @@ const e = require("express")
 
 module.exports.isAuth = (req,res,next) => {
           if (req.isAuthenticated()){
-                    next()
+              next()
           }else{
-                    res.json({message:"NOT AUTHENTICATED"})
+              res.json({message:"NOT AUTHENTICATED"})
           }
 }
 

@@ -2,7 +2,7 @@
   "locales": ["en", "ne","mai"],
   "defaultLocale": "en",
   "pages": {
-    "*": ["common"],
+    "*": ["common","other","register"],
     "/register":["register"],
     "/login":["register"],
     "/404":["register"]

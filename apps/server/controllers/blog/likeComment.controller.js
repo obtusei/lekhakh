@@ -1,28 +1,46 @@
 const prisma = require("../../prisma/prisma.js");
 
-module.exports.likeABlog = async (req,res) => {
+module.exports.ifLikeExist = async (req,res,next) => {
   try{
-    const ifLikeExist = await prisma.like.findMany({
+    const like = await prisma.like.findMany({
       where:{
-        blogId:{
-          equals:req.body.blogId
-        },
-        userId:{
-          equals:req.user.id
-        }
+        AND:[
+          {
+            blogId:{
+              equals:req.body.blogId
+            }
+          },
+          {
+            userId:{
+              equals:req.user.id
+            }
+          }
+        ]
       }
     })
-    if (!ifLikeExist){
-      const createLike  = await prisma.like.create({
-        data:{
-          blogId:req.body.blogId,
-          userId:req.user.id
-        }
-      })
-      res.status(200).json(createLike)
+
+    if (like.length == 1){
+      res.send("Already Liked")
+    }else{
+      next()
     }
-    
-    res.json("Already liked")
+  }
+  catch{
+    res.send("ERROR")
+  }
+}
+
+module.exports.likeABlog = async (req,res) => {
+  try
+  {
+    const createLike  = await prisma.like.create({
+      data:{
+        blogId:req.body.blogId,
+        userId:req.user.id
+      }
+    })
+    res.status(200).json(createLike)
+       
   }
   catch{
     res.status(404).send("Couldn't like the blog.")
@@ -33,12 +51,18 @@ module.exports.deleteALike = async (req,res) => {
   try{
     const ifExist  = await prisma.like.findMany({
       where:{
-        blogId:{
-          equals:req.body.blogId
-        },
-        userId:{
-          equals:req.user.id
-        }
+        AND:[
+          {
+            blogId:{
+              equals:req.body.blogId
+            }
+          },
+          {
+            userId:{
+              equals:req.user.id
+            }
+          }
+        ]
       }
     })
     const deleteLike  = await prisma.like.delete({
@@ -74,7 +98,7 @@ module.exports.deleteComment = async (req,res) => {
   try{
     const deletion  = await prisma.comment.delete({
       where:{
-        id:req.body.id
+        id:req.params.id
       }
     })
     res.status(200).json(deletion)
@@ -84,29 +108,44 @@ module.exports.deleteComment = async (req,res) => {
   }
 }
 
-module.exports.saveABlog = async (req,res) => {
+module.exports.ifSaveExist = async (req,res,next) => {
   try{
     const ifsaveExist = await prisma.savedBlogByUser.findMany({
       where:{
-        blogId:{
-          equals:req.body.blogId
-        },
-        userId:{
-          equals:req.user.id
-        }
+        AND:[
+          {
+            blogId:{
+              equals:req.body.blogId
+            }
+          },
+          {
+            userId:{
+              equals:req.user.id
+            }
+          }
+        ]
       }
     })
-    if (!ifsaveExist){
-      const createSave  = await prisma.savedBlogByUser.create({
-        data:{
-          blogId:req.body.blogId,
-          userId:req.user.id
-        }
-      })
-      res.status(200).json(createSave)
+
+    if (ifsaveExist.length == 1){
+      res.send("Already Liked")
+    }else{
+      next()
     }
-    
-    res.json("Already saved")
+
+  }catch{
+    res.send("ERROR hecki")
+  }
+}
+module.exports.saveABlog = async (req,res) => {
+  try{
+    const createSave  = await prisma.savedBlogByUser.create({
+      data:{
+        blogId:req.body.blogId,
+        userId:req.user.id
+      }
+    })
+    res.status(200).json(createSave)
   }
   catch{
     res.status(404).send("Couldn't save the blog.")
@@ -117,12 +156,18 @@ module.exports.deleteASave = async (req,res) => {
   try{
     const ifExist  = await prisma.savedBlogByUser.findMany({
       where:{
-        blogId:{
-          equals:req.body.blogId
-        },
-        userId:{
-          equals:req.user.id
-        }
+        AND:[
+          {
+            blogId:{
+              equals:req.body.blogId
+            }
+          },
+          {
+            userId:{
+              equals:req.user.id
+            }
+          }
+        ]
       }
     })
     const deleteSave  = await prisma.savedBlogByUser.delete({
@@ -134,5 +179,78 @@ module.exports.deleteASave = async (req,res) => {
   }
   catch{
     res.status(404).send("Couldn't delete the saved blogs")
+  }
+}
+
+module.exports.getComments = async (req,res) => {
+  try{
+    const comments = await prisma.comment.findMany({
+      where:{
+        blogId:{
+          equals:req.params.id
+        }
+      },
+      include:{
+        User:true
+      }
+    })
+
+    res.status(200).json(comments)
+  }
+  catch{
+    res.status(404).send("ERROR")
+  }
+}
+
+
+module.exports.isBloggedLikeBySessionUser = async (req,res) => {
+  try{
+
+    const like = await prisma.like.findMany({
+      where:{
+        AND:[
+          {
+            blogId: {
+              equals: req.params.id,
+            },
+          },
+          {
+            userId: {
+              equals: req.user.id,
+            },
+          },
+        ]
+      }
+    })    
+    res.json({doesLike:like.length != 0})
+  }
+  catch{
+    res.send("ERROR")
+  }
+}
+
+module.exports.isBloggedSaveBySessionUser = async (req,res) => {
+  try{
+
+    const save = await prisma.savedBlogByUser.findMany({
+      where:{
+        AND:[
+          {
+            blogId: {
+              equals: req.params.id,
+            },
+          },
+          {
+            userId: {
+              equals: req.user.id,
+            },
+          },
+        ]
+      }
+    })    
+    res.json({doesSave:save.length != 0})
+  }
+  catch{
+    res.send("ERROR")
   }
 }

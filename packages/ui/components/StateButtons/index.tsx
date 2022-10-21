@@ -1,4 +1,4 @@
-import { ActionIcon } from '@mantine/core'
+import { ActionIcon, Alert } from '@mantine/core'
 import { IconHeart } from '@tabler/icons'
 import React, { useState } from 'react'
 import { BookmarkFilledIcon, BookmarkIcon, CommentIcon, HeartIcon, HeartIconFilled, Logo, PauseIcon, PlayIcon, ShareIcon } from '../../Icons'
@@ -16,33 +16,30 @@ export function LogoLink({width}:{width?:string}){
 }
 
 
-export function LikeButton({onClick}:{onClick:()=>void}) {
-  const [click,setClick] = useState(false)
+export function LikeButton({onClick,doesLike}:{onClick:()=>void,doesLike:boolean}) {
+  
   const { colorScheme } = useMantineColorScheme()
   return (
     <ActionIcon onClick={(e:React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault()
-      setClick(!click)
       onClick()
-
     }}>
       {
-        click ? <HeartIconFilled color='red'/>:<HeartIcon color={colorScheme === 'dark' ? "white":"black"}/>
+        doesLike ? <HeartIconFilled color='red'/>:<HeartIcon color={colorScheme === 'dark' ? "white":"black"}/>
       }
     </ActionIcon>
   )
 }
 
-export function BookmarkButton() {
-  const [click,setClick] = useState(false)
+export function BookmarkButton({onClick,doesSave}:{onClick:() => void,doesSave:boolean}) {
   const { colorScheme } = useMantineColorScheme();
   return (
     <ActionIcon onClick={(e:React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault()
-      setClick(!click)
+      onClick()
     }}>
       {
-        click ? <BookmarkFilledIcon color='green'/>:<BookmarkIcon color={colorScheme === 'dark' ? "white":"black"}/>
+        doesSave ? <BookmarkFilledIcon color='green'/>:<BookmarkIcon color={colorScheme === 'dark' ? "white":"black"}/>
       }
     </ActionIcon>
   )
@@ -63,10 +60,10 @@ export function ShareButton() {
   )
 }
 
-export function CommentButton(){
+export function CommentButton({onClick}:{onClick:() => void}){
   const { colorScheme } = useMantineColorScheme();
   return(
-    <ActionIcon>
+    <ActionIcon onClick={() =>onClick()}>
       <CommentIcon color={colorScheme === 'dark' ? "white":"black"} />
     </ActionIcon>
   )
