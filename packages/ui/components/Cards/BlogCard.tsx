@@ -44,13 +44,13 @@ function BlogCard({props,session,isSmall,index,likeclick,bookmarkclick,doesLike,
               <>
               <Text lineClamp={4} color="dimmed">{convert(props.content,{wordwrap:130})}</Text>
               <Group mt={"sm"}>
-                        {/* {
-                          props.tag.map((tag,index) => (
+                        {
+                          props?.tag != null && props.tag.map((tag,index) => (
                             <div key={index}>
-                              <Href link={`/tag/${tag.name.toLowerCase()}`} title={tag.name}/>
+                              <Href link={`/tag/${tag.name.toLowerCase()}`} title={`#${tag.name}`}/>
                             </div>
                           ))
-                        } */}
+                        }
               </Group>
               </>
             )

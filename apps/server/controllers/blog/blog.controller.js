@@ -2,8 +2,13 @@ const prisma = require("../../prisma/prisma.js");
 
 module.exports.createBlog = async (req,res) => {
   const data = req.body;
+  const cat = data.category != null ? data.category:"Blog"
   try{
-    const category = await prisma.category.findUnique({where:{name:data.category}});
+    const category = await prisma.category.findUnique({where:{name:cat}});
+    const newTags = data.tag.map((ta) => ta ={
+        name:ta
+      })
+
     const blog  = await prisma.blog.create(
       {
         data:{
@@ -14,6 +19,9 @@ module.exports.createBlog = async (req,res) => {
               id: category.id
             }
           },
+          tag: {
+            create:newTags
+          },
           user:{
             connect:{
               id:req.user.id
@@ -22,12 +30,8 @@ module.exports.createBlog = async (req,res) => {
         }
       }
     );
-    // const tag = await prisma.tag.createMany({
-    //   data:{
-
-    //   }
-    // })
     res.status(200).json(blog)
+    
   }catch{
     res.status(404).send("ERROR")
   }
@@ -107,7 +111,8 @@ module.exports.trendoftheday = async (req,res) => {
         category:true,
         user:true,
         likes:true,
-        comments:true
+        comments:true,
+        tag:true
       }
     })
     res.json(trending)
@@ -128,7 +133,8 @@ module.exports.trendingBlog = async (req,res) => {
         category:true,
         user:true,
         likes:true,
-        comments:true
+        comments:true,
+        tag:true
       }
     })
     res.json(trending)
@@ -144,6 +150,7 @@ module.exports.topBlog = async (req,res) => {
       take: 10,
       include:{
         category:true,
+        tag:true,
         user:true,
         likes:true,
         comments:true
@@ -203,7 +210,7 @@ module.exports.followingBlog = async (req,res,next) => {
                                       include:{
                                         category:true,
                                         user:true,
-                                        // tag:true
+                                        tag:true
                                       }
                                     }
                                   }
