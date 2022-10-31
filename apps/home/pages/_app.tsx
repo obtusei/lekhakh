@@ -3,21 +3,23 @@ import { MantineProvider,ColorSchemeProvider,ColorScheme, SpotlightProvider,Spot
 import myTheme from 'ui/theme';
 import axios from "axios";
 import useSWR, { SWRConfig } from "swr";
-import {useEffect, useState} from "react"
-import { GetCategories } from "../api/user";
-
+import { useRouter } from "next/router";
 axios.defaults.baseURL = 'http://localhost:3002';
-const onTrigger = () => {};
 
-const actions: SpotlightAction[] = [
-  { title: 'Home', group: 'main', onTrigger },
-  { title: 'Docs', group: 'main', onTrigger },
-  { title: 'Dashboard', group: 'main', onTrigger },
-];
+
 
 export default function App(props:AppProps){
   const { Component, pageProps } = props;
+  const router = useRouter()
+  const onTrigger = (href:any) => { router.push(href)};
 
+  const actions: SpotlightAction[] = [
+    { title: 'Discover', group: 'main', onTrigger: () => router.push('/discover') },
+    { title: 'Trending', group: 'main', onTrigger: () => router.push('/trending')  },
+    { title: 'Following', group: 'main', onTrigger: () => router.push('/following')  },
+    { title: 'Writers', group: 'main', onTrigger: () => router.push('/writers')  },
+    { title: 'Settings', group: 'main', onTrigger: () => router.push('/settings')  },
+  ];
   // const [colorScheme, setColorScheme] = useState<ColorScheme>('light');
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
     key: 'lekhakh-color-scheme',
@@ -30,7 +32,7 @@ export default function App(props:AppProps){
   // const toggleColorScheme = (value?: ColorScheme) =>
   //   setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
   const {data:catData,error} = useSWR('/admin/categories',{ refreshInterval: 0 });
-  catData?.map(({name}:{name:string})=>(actions.push({title:name,group: 'Cat',onTrigger}))) || [];
+  catData?.map(({name}:{name:string})=>(actions.push({title:name,group: 'Category',onTrigger:() => router.push(`/category/${name.toLowerCase()}`)}))) || [];
 
   return(
       <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>

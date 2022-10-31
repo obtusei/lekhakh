@@ -45,5 +45,6 @@
       "dob":"Date of birth",
       "pickDate":"Pick date",
       "changePassword":"Change Password",
-      "save":"Save changes"
+      "save":"Save changes",
+      "invalidEmailPassword":"Invalid Email or Password"
 }

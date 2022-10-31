@@ -67,7 +67,7 @@ export const ADMIN_NAVDATA:SideBarProps[] = [
   { label: 'Categories', icon: HashtagIcon,href:"/categories"},
   { label: 'Tags', icon: HashtagIcon,href:"/tags"},
   { label: 'Roles', icon: HashtagIcon,href:"/roles"},
-  { label: 'View Code', icon: HashtagIcon,href:"/code"},
-  { label: 'Feedbacks', icon: HashtagIcon,href:"/feedback"},
+  { label: 'View Code', icon: HashtagIcon,href:"https://github.com/obtusei/lekhakh"},
+  { label: 'Feedbacks', icon: HashtagIcon,href:"/feedbacks"},
   { label: 'Reports', icon: HashtagIcon,href:"/reports"},
 ]

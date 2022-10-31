@@ -19,7 +19,7 @@
       "goBack": "Go Back",
       "heroSub":"START BEING A READER",
       "heroSub2":"START BEING A WRITER",
-      "heroTitle":"Hunger for words.",
+      "heroTitle":"Learn something everyday",
       "heroTitle2":"Come out & play with words.",
       "heroDes":"If you have a story to tell, knowledge to share, or a perspective to offer — welcome home. Sign up for free so your writing can thrive in a network supported by millions of readers — not ads.",
       "heroDes2":"If you have a story to tell, knowledge to share, or a perspective to offer — welcome home. Sign up for free so your writing can thrive in a network supported by millions of readers — not ads.",
@@ -50,5 +50,13 @@
       "pickDate":"Pick date",
       "changePassword":"Change Password",
       "save":"Save changes",
-      "nothingToShow":"Nothing to show"
+      "nothingToShow":"Nothing to show",
+      "newsletter":"Newsletter",
+      "newsletterSub":"Keep up with our latest news and events. Subscribe to our newsletter.",
+      "subscribe":"Subscribe",
+      "newsletterSuccess":"Thank you for subscribing us",
+      "newsletterSuccessSub":"We will keep you up to date 😉",
+      "newsletterFail":"Already subscribed",
+      "newsletterFailSub":"We appreciate for your enthusiasm 😉",
+      "cancel":"Cancel"
 }

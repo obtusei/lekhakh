@@ -5,12 +5,15 @@ import { registerTheUser,GetSession } from '../api/user';
 import {useRouter} from "next/router";
 import { showNotification } from 'ui';
 import useTranslation from 'next-translate/useTranslation';
+import axios from 'axios';
 
 function Register() {
   const [loading,setLoading] = useState(false);
   const router = useRouter();
   const {t} = useTranslation("register");
   const {session,isLoading} = GetSession()
+  const [emailError,setEmailError] = useState(false)
+  const [usernameError,setUsernameError] = useState(false)
   const registerData = {
     title:t("register"),
     subTitle:t("createAnAccount"),
@@ -58,14 +61,23 @@ function Register() {
             <UserSign>
               <RegisterUser onSubmit={
                 async (values) => {
-                  setLoading(true);
                   const { name,username, email, password } = values
-                  await registerTheUser({ name, email,username, password})
-                  showNotification({ message: t('successfullyRegistered'), color: 'green' });
-                  setLoading(false);
-                  router.push('/login');
+                   axios.post("/auth/register",{name,email,username,password},{withCredentials:true})
+                   .then((res) => {
+                    showNotification({ message: t('successfullyRegistered'), color: 'green' });
+                    router.push('/login');  
+                   })
+                   .catch((err) => {
+                    console.log(err.response.data)
+                      if (err.response.data.doesEmailExist){
+                        setEmailError(true)
+                      }else{
+                        setUsernameError(true)
+                      }
+                   })
+                  
                 }
-              } loading={loading} stringData={registerData}/>
+              } loading={loading} stringData={registerData} emailError={emailError} usernameError={usernameError}/>
             </UserSign>
       </div>
     )

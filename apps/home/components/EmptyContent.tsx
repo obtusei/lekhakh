@@ -1,4 +1,3 @@
-import React from 'react'
 import { Center, Text } from 'ui'
 import useTranslation from 'next-translate/useTranslation'
 type Props = {

@@ -1,31 +1,26 @@
 import axios from 'axios';
-import { GetServerSideProps, GetStaticProps } from 'next';
 import useTranslation from 'next-translate/useTranslation';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { mutate } from 'swr';
-import { Avatar, Button,Stack, Input,Text, Textarea, FileButton, Grid, Title, Divider, DatePicker } from 'ui'
+import { Avatar, Button,Stack, Input,Text, Textarea, FileButton, Grid, Title, Divider, DatePicker, Footer, Center } from 'ui'
+import LowerMenu from 'ui/components/LowerMenu';
+import { getInitial } from 'ui/lib/logics';
 import { GetSession } from '../api/user';
 import Layout from '../components/Layout'
-import safeJsonStringify from "safe-json-stringify"
-import { useDidUpdate } from 'ui';
-export async function getServerSideProps () {
-  // `getStaticProps` is executed on the server side.
-  const res = await axios.get('/auth/info',{withCredentials:true})
-  const session = await res.data
-  return {
-    props: {
-      user:session
-    }
-  }
-}
-function Settings({user}:{user:any}) {
+
+function Settings() {
   
   const {session,isLoading} = GetSession()
   const [name,setName] = useState(session?.user?.name)
-  const [username,setUsername] = useState(user?.username)
-  const [email,setEmail] = useState(user?.email)
-  const [bio,setBio] = useState(user?.bio)
-  const [dob,setDob] = useState(user?.dateOfBirth)
+  const [username,setUsername] = useState(session?.user?.username)
+  const [email,setEmail] = useState(session?.user?.email)
+  const [bio,setBio] = useState(session?.user?.bio)
+  const time = new Date(session?.user?.dataOfBirth != null ? session?.user?.dataOfBirth:Date.now())
+  const today = new Date(Date.now())
+  const [dob,setDob] = useState(time)
+  const [usernameError,setUsernameError] = useState(false)
+  const [emailError,setEmailError] = useState(false)
 
   const handleUploadProfile = (file:File) => {
     const formData = new FormData()  
@@ -50,65 +45,87 @@ function Settings({user}:{user:any}) {
     }
     
   }
-
+  const router = useRouter()
   const saveChanges = () => {
+    try{
+      const data = {
+        name:name,
+        username:username,
+        email:email,
+        bio:bio
+      }
+      axios.put("/auth/info",data,{withCredentials:true})
+      .then((res) => {
+        // router.push("/")
+        console.log(`DATA:::: ${res.data} :::::`)
+      })
+      .catch((error) => {
+        if (error.response.data?.username){
 
+          setUsernameError(true)
+        }
+        else if (error.response.data.email){
+          setEmailError(true)
+        }
+      })
+    }
+    catch{
+      console.log("ERROR making changes")
+    }
   }
 
-  const { t } = useTranslation("common")
+  const { t } = useTranslation()
   // if (user){
     return (
       <Layout>
-        <Title>{t("settings")} and {session?.user ? session.user?.username:"Sa"}</Title><br />
-        <Text>Something: {JSON.stringify(user)}</Text>
+        <Title>{t("common:settings")}</Title><br />
         <Divider/>
         <Grid grow style={{padding:"20px"}}>
           <Grid.Col span={4}>
             <Stack align={"center"} spacing={0}>
-              <Avatar size={'xl'} radius={200} color="red">{user?.name}</Avatar>
+              <Avatar size={'xl'} src={session?.user?.image != null ? `http://localhost:3002${session?.user?.image}`:""} radius={200} color="red">{getInitial(session?.user.name || "")}</Avatar>
               <FileButton onChange={(file) => {
                 if (file != null){
                   handleUploadProfile(file);
                 }
               }} accept="image/png,image/jpeg">
-                {(props) => <Button {...props} variant="white">{t("changeProfile")}</Button>}
+                {(props) => <Button {...props} variant="white">{t("common:changeProfile")}</Button>}
               </FileButton>
               <br />
               <Text color={"dimmed"}>
                 #Tips and rules <br />
-                • Help people discover your account by using the name youre known by: either your full name, nickname, or business name. <br />
+                • Help people discover your account by using the name you are known by: either your full name, nickname, or business name. <br />
                 • Your username must be <span style={{fontWeight:"bold"}}>unique</span>
               </Text>
             </Stack>
           </Grid.Col>
         <Grid.Col span={4} style={{minWidth:"300px"}}>
           <Stack>
-            <Input.Wrapper label={t("name")}>
-            <Input placeholder={""} value={name} onChange={(e) => setName(e.target.value)}/>
+            <Input.Wrapper label={t("register:name")}>
+            <Input placeholder={""} value={name} onChange={(e:React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}/>
           </Input.Wrapper>
 
-          <Input.Wrapper label={t("username")}>
-            <Input placeholder="" value={username} onChange={(e) => setUsername(e.target.value)}/>
+          <Input.Wrapper label={t("register:username")} error={usernameError ? t("register:usernameAlreadyExists"):""} onKeyDown={() => setUsernameError(false)}>
+            <Input placeholder="" value={username} onChange={(e:React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}/>
           </Input.Wrapper>
 
-          <Input.Wrapper label={t("email")}>
-            <Input placeholder="" value={email} onChange={(e) => setEmail(e.target.value)}/>
+          <Input.Wrapper label={t("register:email")} error={emailError ? t("register:emailAlreadyExists"):""} onKeyDown={() => setEmailError(false)}>
+            <Input placeholder="" value={email} onChange={(e:React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}/>
           </Input.Wrapper>
 
           <Textarea
           placeholder=""
-          label={t('yourBio')}
-          value={bio} onChange={(e) => setBio(e.target.value)}
+          label={t('register:bio')}
+          value={bio} onChange={(e:React.ChangeEvent<HTMLTextAreaElement>) => setBio(e.target.value)}
           />
-
-          <DatePicker placeholder={t("pickDate")} label={t("dob")} value={dob} onChange={(e) => setDob(e)}/>
-
-          <Button variant='subtle'>{t("changePassword")}</Button>
-
-          <Button>{t("save")}</Button>
+          <Button onClick={() => saveChanges()}>{t("register:save")}</Button>
           </Stack>
         </Grid.Col>
         </Grid>
+        <br />
+        <Center style={{width:"100%"}}>
+          <LowerMenu/>
+        </Center>
       </Layout>
     )
   // }

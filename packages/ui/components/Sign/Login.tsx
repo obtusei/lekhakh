@@ -5,11 +5,11 @@ import Link from 'next/link';
 import { RegisterProps } from './Register';
 import Href from '../Link';
 
-export default function LogIn({onSubmit,loading,stringData}:RegisterProps) {
+export default function LogIn({onSubmit,loading,stringData,inCorrect}:RegisterProps) {
   const form = useForm({
     initialValues: {username: '', password: '' },
     validate: {
-      username: (value) => (value.length < 2 ? stringData.emailRequired : null),
+      username: (value) => (/^\S+@\S+$/.test(value) ? null:stringData.emailRequired),
       password: (value) => (value.length < 6 ? stringData.passwordRequired : null),
     },
   });
@@ -34,6 +34,7 @@ export default function LogIn({onSubmit,loading,stringData}:RegisterProps) {
         <Stack style={{width:"100%"}} spacing={0}>
           <Title>{stringData.title}</Title>
           <Text color={"dimmed"}>{stringData.subTitle}</Text>
+          <Text color={"red"}>{inCorrect ? stringData.invalidEmailPassword:""}</Text>
           <TextInput mt={"lg"} label={stringData.email} placeholder={stringData.email} {...form.getInputProps('username')} size="md" variant="filled"/>
           <PasswordInput
               mt={"sm"} 
@@ -45,7 +46,7 @@ export default function LogIn({onSubmit,loading,stringData}:RegisterProps) {
             />
             
           <Button type="submit" mt="sm" size='lg'>
-            Login
+            {stringData.login}
           </Button>
         </Stack>
         <Group spacing={5}>

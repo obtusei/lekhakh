@@ -3,6 +3,20 @@
   "followers":"Followers",
   "following":"Following",
   "follow":"Follow",
-  "saved":"saved",
-  "nBlogs":"{{count}} blogs"
+  "saved":"Saved",
+  "nBlogs":"{{count}} blogs",
+  "writers":"Writers",
+  "enterTheTitle":"Enter the title",
+  "pickOne":"Pick Category",
+  "addSomeTags":"Add Some Tags",
+  "blogPlaceholder":"Enter your blog content",
+  "publish":"Publish",
+  "404":"404 Error",
+  "notFound":"The page you are looking for is not here",
+  "goBack":"Go Back",
+  "noCommentToShow":"No comments to show",
+  "writeAComment":"Write a comment",
+  "comment":"Comment",
+  "comments":"Comments",
+  "likes":"Likes"
 }

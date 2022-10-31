@@ -1,4 +1,4 @@
-import { ActionIcon, Alert } from '@mantine/core'
+import { ActionIcon, Alert, CopyButton } from '@mantine/core'
 import { IconHeart } from '@tabler/icons'
 import React, { useState } from 'react'
 import { BookmarkFilledIcon, BookmarkIcon, CommentIcon, HeartIcon, HeartIconFilled, Logo, PauseIcon, PlayIcon, ShareIcon } from '../../Icons'
@@ -45,17 +45,22 @@ export function BookmarkButton({onClick,doesSave}:{onClick:() => void,doesSave:b
   )
 }
 
-export function ShareButton() {
+export function ShareButton({href}:{href:string}) {
   const { colorScheme } = useMantineColorScheme();
   return(
-      <ActionIcon onClick={
-        (e:React.MouseEvent<HTMLButtonElement>) => {
-          e.preventDefault();
-          showNotification({message:"Copy to clipboard",color:"yellow"})
-        }
-      }>
-        <ShareIcon color={colorScheme === 'dark' ? "white":"black"} />
-      </ActionIcon>
+      <CopyButton value={href}>
+        { ({copied, copy}) => (
+          <ActionIcon onClick={
+            (e:React.MouseEvent<HTMLButtonElement>) => {
+              e.preventDefault();
+              copy()  
+              showNotification({message:"Copy to clipboard",color:"yellow"})
+            }
+          }>
+            <ShareIcon color={colorScheme === 'dark' ? "white":"black"} />
+          </ActionIcon>
+        )}
+      </CopyButton>
     
   )
 }

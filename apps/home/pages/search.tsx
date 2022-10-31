@@ -1,11 +1,11 @@
 import { useRouter } from 'next/router'
-import React from 'react'
-import { Title,Text,Tabs, Grid, Card } from 'ui'
-import BlogCard from 'ui/components/Cards/BlogCard'
+import { Title,Text,Tabs, Grid, Paper, Group, Avatar, Stack, Button } from 'ui'
 import ProfileCard, { UserProfileCardStringProps } from 'ui/components/Profile/ProfileCard'
 import { IUser } from 'ui/lib/interfaces'
+import { getInitial } from 'ui/lib/logics'
 import { SearchBlogs } from '../api/blog'
 import { GetSession, SearchUsers } from '../api/user'
+import Card from '../components/Card'
 import { ErrorSection, LoadingSection } from '../components/ErrorAndLoading'
 import Layout from '../components/Layout'
 
@@ -21,7 +21,6 @@ function Search() {
     followers: "Followers",
     following: "Following",
     follow: "Follow",
-    contact: "Contact"
   }
   return (
     <Layout>
@@ -39,7 +38,7 @@ function Search() {
           {
             blogs.data ? blogs.data.map((blog,index) => (
               <Grid.Col span={4} key={index}>
-                <BlogCard props={blog} session={session}/>
+                <Card blog={blog}/>
               </Grid.Col>
             )): blogs.isError ? <ErrorSection/>:<LoadingSection/>
 
@@ -52,9 +51,21 @@ function Search() {
           {
             users.data ? users.data.map((user:IUser,index:number) => (
               <Grid.Col span={4} key={index}>
-                <Card shadow={"lg"} withBorder>
-                  <ProfileCard props={user} session={session} stringData={stringData}  />
-                </Card>
+                {/* <Card shadow={"lg"} withBorder> */}
+                  {/* <ProfileCard props={user} session={session} stringData={stringData} onFollowClick={() => alert("FOLLOW")}  /> */}
+                  <Paper withBorder key={index} style={{padding:"20px"}}>
+                    <Group style={{justifyContent:"space-between"}}>
+                      <Group>
+                        <Avatar size={"sm"} src={user.image != null ? `http://localhost:3002${user.image}`:""} radius={100}>{getInitial(user.name)}</Avatar>
+                        <Stack spacing={0}>
+                          <Title order={5}>{user.name}</Title>
+                          <Text color="dimmed">@{user.username}</Text>
+                        </Stack>
+                      </Group>
+                      <Button variant='light' onClick={() => router.push(`/${user.username}`)}>See More</Button>
+                    </Group>
+                  </Paper>
+                {/* </Card> */}
               </Grid.Col>
             )):
             users.isError ? <ErrorSection/>:<LoadingSection/>

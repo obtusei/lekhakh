@@ -1,47 +1,45 @@
 const prisma = require("./prisma.js")
 const bcrpyt = require("bcrypt");
+const users = require('./users.json')
+const blogs = require("./blogs.json")
 
 async function encryptPassword(word){
           const has = await bcrpyt.hash(word,10);
           return has
           
 }
+
+async function createNewUsers(){
+    const newUsers = await Promise.all(users.map(async (user) => user = {
+            name:user.name,
+            username:user.username,
+            email:user.email,
+            password: await encryptPassword(user.password),
+            bio:user.bio,
+            dateOfBirth:user.dateOfBirth,
+            emailVerified:user.emailVerified
+  }))
+  await prisma.user.createMany({data:newUsers});
+}
 async function main() {
-          
-    await prisma.user.createMany({
-        data:[
-          {
-            name:"Test 01",
-            username:"test01",
-            email:"test01@gmail.com",
-            password:await encryptPassword("test01"),
-          },
-          {
-            name:"Test 02",
-            username:"test02",
-            email:"test02@gmail.com",
-            password:await encryptPassword("test02"),
-          },
-          {
-            name:"Test 03",
-            username:"test03",
-            email:"test03@gmail.com",
-            password:await encryptPassword("test03"),
-          },
-          {
-            name:"Test 04",
-            username:"test04",
-            email:"test04@gmail.com",
-            password:await encryptPassword("test04"),
-          },
-          {
-            name:"Test 05",
-            username:"test05",
-            email:"test05@gmail.com",
-            password:await encryptPassword("test05"),
-          },
-        ]
-    });
+
+  const categories = await prisma.category.findMany();
+  const users = await prisma.user.findMany()
+  const crandom = Math.floor(Math.random() * categories.length);
+  const urandom = Math.floor(Math.random() * users.length);
+  
+  const newten = blogs.slice(0,2)
+  const newBlogs = await Promise.all(newten.map(async (blog) => blog = {
+            title:blog.title,
+            content:blog.content,
+            createdAt:blog.createdAt,
+            updatedAt:blog.updatedAt,
+            userId:users[50].id,
+            categoryId:categories[1].id
+  }))
+
+//   await prisma.user.createMany({data:newUsers});
+  await prisma.blog.createMany({data:newBlogs});
 
 
 }

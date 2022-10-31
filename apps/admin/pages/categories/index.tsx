@@ -1,23 +1,54 @@
+import axios from 'axios';
 import React, { useState } from 'react'
+import { mutate } from 'swr';
 import { Divider, Title,Table, TextInput, Button, Group, Text, Stack } from 'ui'
+import { GetCategories } from '../../components/API';
 import Layout from '../../components/Layout'
 
 function Categories() {
   const [newCat,setNewCat] = useState("");
-  const addCategory = () => {
+  const [doesCatExist,setDoesCatExist] = useState(false);
+  const categories = GetCategories();
 
+  const addCategory = () => {
+    try{
+      axios.post("/admin/categories",{name:newCat},{withCredentials:true})
+      .then((res) => {
+        mutate("/admin/categories")
+        console.log(res.data)
+      })
+      .catch((err) => {
+        setDoesCatExist(true)
+      })
+    }
+    catch{
+      console.log("ERROR")
+    }
+  }
+
+  const deleteCategory = (id:string) => {
+    try{
+      axios.delete(`/admin/categories/${id}`,{withCredentials:true})
+      .then((res) => {
+        mutate("/admin/categories")
+        console.log(res.data)
+      })  
+    }
+    catch{
+      console.log("ERROR")
+    }
   }
 
   return (
     <Layout>
       <Stack spacing={0}>
         <Title>Categories</Title>
-        <Text color={"gray"} weight="bold">Total: {12}</Text>
+        <Text color={"gray"} weight="bold">Total: {categories.data ? categories.data.length:0}</Text>
       </Stack>
       <Divider/>
       <br />
       <Title order={4}>Add Category</Title>
-      <Group align={"flex-end"}>
+      <Group align={"center"}>
         <TextInput
           title='Enter the category title'
           placeholder='Science and Technology'
@@ -25,7 +56,8 @@ function Categories() {
           variant="filled"
           value={newCat}
           onChange={(e) => setNewCat(e.target.value)}
-          
+          error={doesCatExist ? "Category exists already":null}
+          onKeyDown={(e) => setDoesCatExist(false)}
         />
         <Button onClick={addCategory}>Add</Button>
       </Group>
@@ -42,15 +74,16 @@ function Categories() {
         </thead>
         <tbody>
           {
-            [1,2,3,4,5].map((cat,index) => ( 
+            categories.data ? categories.data?.map((cat:any,index:number) => ( 
             <tr key={index}>
-              <td>1</td>
-              <td>Abhishek Bhatta</td>
+              <td>{index+1}</td>
+              <td>{cat.name}</td>
               <td>
-                <Button variant='white'>Delete</Button>
+                <Button variant='white' onClick={() => deleteCategory(cat.id)}>Delete</Button>
               </td>
             </tr>
-          ))
+          )):
+          categories.isError ? <>Error</>:<>Loading</>
           }
         </tbody>
       </Table>

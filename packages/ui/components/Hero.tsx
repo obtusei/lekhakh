@@ -1,8 +1,10 @@
 import { Stack, Title,Text, Button, SimpleGrid,useMantineTheme, Center, Box } from '@mantine/core'
 import { HeroProps } from '../lib/interfaces';
+import {useRouter} from "next/router"
 
 export default function Hero(props:HeroProps) {
   const theme = useMantineTheme();
+  const router = useRouter()
   return (
     <div  style={{padding:"20px"}}>
       <SimpleGrid cols={2}>
@@ -14,7 +16,7 @@ export default function Hero(props:HeroProps) {
                               <Text color={"dimmed"}>{props.description}</Text>
                     </Stack>
                     <Box>
-                      <Button mt={'lg'}>{props.buttonText}</Button>
+                      <Button mt={'lg'} onClick={() => router.push("/discover")}>{props.buttonText}</Button>
                     </Box>
                     </Stack>
           </Center>

@@ -1,0 +1,22 @@
+{
+  "blogs":"ब्लॉग",
+  "followers":"अनुयायी",
+  "following":"निम्नलिखित",
+  "follow":"अनुसरण",
+  "saved":"सहेजल गेल",
+  "nBlogs":"{{count}} ब्लॉग",
+  "writers":"लेखक लोग",
+  "enterTheTitle":"शीर्षक दर्ज करू",
+  "pickOne":"श्रेणी चुनें",
+  "addSomeTags":"किछु टैग जोड़ू",
+  "blogPlaceholder":"छापागू",
+  "publish":"प्रकाशित करे",
+  "404":"404 त्रुटि",
+  "notFound":"अहाँ जे पेज ताकि रहल छी से एतय नहि अछि",
+  "goBack":"वापस जाउ",
+  "noCommentToShow":"कोनो टिप्पणी नहि देखाबय लेल",
+  "writeAComment":"टिप्पणी लिखू",
+  "comment":"टिप्पणी",
+  "comments":"टिप्पणी",
+  "likes":"लाइक्स"
+}

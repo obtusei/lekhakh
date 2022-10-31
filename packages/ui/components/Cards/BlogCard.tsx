@@ -33,45 +33,16 @@ function BlogCard({props,session,isSmall,index,likeclick,bookmarkclick,doesLike,
       <Card shadow="sm" p="md" radius="md" withBorder style={{width:"100%"}}>
           <Group position='apart'>
                 <Group>
-                  {/* Hover Card */}
-                  <HoverCard>
-                  <HoverCard.Target>
-                    <Group>
-                      <Avatar size="sm" src={props?.user.image} radius={20}>{getInitial(props.user.name)}</Avatar>
+                      <Avatar size="sm" src={props?.user.image != null ? `http://localhost:3002${props.user.image}`:""} radius={20}>{getInitial(props.user.name)}</Avatar>
                     <Text>{props?.user.name}</Text>
-                    </Group> 
-                  </HoverCard.Target>
-                  <HoverCard.Dropdown>
-                    <Paper>
-                      <Group>
-                      <Avatar size="sm" src={props?.user.image} radius={20}>{getInitial(props.user.name)}</Avatar>
-                      <Stack spacing={0}>
-                        <Group style={{justifyContent:"space-between"}}>
-                          <Title order={4}>{props?.user.name}</Title>
-                          <Button size='sm' variant='light' onClick={(e) => {
-                            e.preventDefault()
-                            router.push(`/${props.user.username}`)
-                          }}>Profile</Button>
-                        </Group>
-                        <Group style={{opacity:0.5}}>
-                          <Text><span style={{fontWeight:'bold'}}>12{props?.user.blogs}</span> Blogs</Text>
-                          <Text><span style={{fontWeight:'bold'}}>12{props?.user.followers}</span> Followers</Text>
-                          <Text><span style={{fontWeight:'bold'}}>12{props?.user.following}</span> Following</Text>
-                          </Group>
-                        </Stack>
-                        </Group>                      
-                    </Paper>
-                  </HoverCard.Dropdown>
-                  </HoverCard>
-                {/* END */}
                 </Group>
-                <ShareButton/>
+                <ShareButton href={`http://localhost:3002/blog/${props.id}`}/>
           </Group>
           <Title order={3}>{props.title}</Title>
           {
             !isSmall && (
               <>
-              <Text lineClamp={4}>{convert(props.content,{wordwrap:130})}</Text>
+              <Text lineClamp={4} color="dimmed">{convert(props.content,{wordwrap:130})}</Text>
               <Group mt={"sm"}>
                         {/* {
                           props.tag.map((tag,index) => (

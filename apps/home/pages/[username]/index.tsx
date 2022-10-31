@@ -12,6 +12,7 @@ import useTranslation from 'next-translate/useTranslation'
 import EmptyContent from '../../components/EmptyContent'
 import {useState} from "react"
 import { LoginModal } from '../../components/LoginModal'
+import { ErrorSection, LoadingSection } from '../../components/ErrorAndLoading'
 
 export async function getStaticPaths() {
   const response = await axios.get(`/user`)
@@ -23,7 +24,7 @@ export async function getStaticPaths() {
   }))
   return {
     paths: paths,
-    fallback: true,
+    fallback: false,
   }
 }
 
@@ -40,13 +41,13 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
 function UserProfile({user}:{user:IUser}) {
   const router = useRouter()
-  const {blogData} = GetUserBlogs(String(router.query.username))
+  const {blogData,isError,isLoading} = GetUserBlogs(String(router.query.username))
   const {userData} = GetUserbyUsername(String(router.query.username))
-  const {session}:{session:{user:IUser}} = GetSession()
-  const userSaved = GetUserSaved()
+  const {session}= GetSession()
+  const userSaved:any = GetUserSaved()
   const {followers} = GetUserFollowers()
   const {following} = GetUserFollowing()
-  const doesFollow = DoesFollow(user.id)
+  const doesFollow = DoesFollow(user ? user.id:"")
   const {t} = useTranslation("other")
   const [openLogin,setOpenLogin] = useState(false)
   const stringData:UserProfileCardStringProps = {
@@ -67,14 +68,14 @@ function UserProfile({user}:{user:IUser}) {
             followers={followers ? followers.followers:null}
             followings={following ? following.following:null}
             doesFollow={doesFollow.data}  
-            onFollowClick={() => user ? followSomeone(userData,doesFollow):setOpenLogin(true)}
+            onFollowClick={() => session && session.user ? followSomeone(userData,doesFollow):setOpenLogin(true)}
           />
           <br />
           <Divider/>
           <br />
 
 {/* TABS FOR BLOGS */}
-          <Tabs defaultValue={"blogs"}>
+          <Tabs defaultValue={session && session.user && router.query.saved === "true" ? "saved":"blogs"}>
             <Tabs.List>
               <Tabs.Tab value="blogs">{t("blogs")}</Tabs.Tab>
               {
@@ -84,15 +85,17 @@ function UserProfile({user}:{user:IUser}) {
           <br />
 
           <Tabs.Panel value="blogs">
-            <Grid>
+            <Grid grow>
               {
-                blogData && blogData.blogs?.length != 0 ? blogData.blogs?.map((blog:IBlog,index:number) => (
+                blogData ? (blogData.blogs?.length != 0 ? blogData.blogs?.map((blog:IBlog,index:number) => (
                   <Grid.Col span={4} key={index}>
                     <Card blog={blog}/>
                   </Grid.Col>
                 ))
                 :
-                <EmptyContent/>
+                <EmptyContent/>)
+                :
+                isLoading ? <LoadingSection/>:<ErrorSection/>
               }
             </Grid>
             
@@ -102,13 +105,15 @@ function UserProfile({user}:{user:IUser}) {
             session && session.user && <Tabs.Panel value='saved'>
               <Grid>
               {
-                userSaved.data && userSaved.data.length != 0 ? userSaved.data.map((blog:IBlog,index:number) => (
+                userSaved.data ? (userSaved.data.length != 0 ? userSaved?.data?.map((blog:{blog:IBlog},index:number) => (
                   <Grid.Col span={4} key={index}>
-                    <Card blog={blog}/>
+                    <Card blog={blog.blog}/>
                   </Grid.Col>
                 ))
                 :
-                <EmptyContent/>
+                <EmptyContent/>)
+                :
+                userSaved.isLoading ? <LoadingSection/>:<ErrorSection/>
               }
             </Grid>
             </Tabs.Panel>

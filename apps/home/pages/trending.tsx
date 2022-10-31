@@ -21,7 +21,9 @@ export default function Trending() {
           <ScrollSection title={t("common:hotWriters")} href='/writers'>
             {
               hotWriters ? hotWriters.map((writer,index:number) => (
-                <CircleCard name={writer.name} image={writer.image != null ? writer.image:''} description={`${writer._count?.blogs} blogs`}/>
+                <div key={index}>
+                  <CircleCard name={writer.name} username={writer.username} image={writer.image != null ? writer.image:''} description={`${writer._count?.blogs} blogs`}/>
+                </div>
               )):
               hotLoading ? <LoadingSection/>:<ErrorSection/>
 

@@ -56,16 +56,15 @@ export default function LowerMenu() {
   return (
     <Group>
       <ColorModeAndLocale/> <Href title="Home" link="/" />
-      <Href title="FAQS" link="/" />
-      <Href title="Login" link="/" />
+      <Href title="Login" link="/login" />
       <Menu trigger="hover">
         <Menu.Target>
           <Text color={"gray"}>Help</Text>
         </Menu.Target>
         <Menu.Dropdown>
-          <Menu.Item>Support</Menu.Item>
-          <Menu.Item>Send Feedback</Menu.Item>
-          <Menu.Item>Shortcuts</Menu.Item>
+          <Menu.Item onClick={() => router.push("/report")}>Report</Menu.Item>
+          <Menu.Item onClick={() => router.push("/feedback")}>Send Feedback</Menu.Item>
+          <Menu.Item onClick={() => router.push("/help/shortcuts")}>Shortcuts</Menu.Item>
         </Menu.Dropdown>
       </Menu>
     </Group>

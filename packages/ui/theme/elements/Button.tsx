@@ -15,7 +15,7 @@ export const Button:ButtonProps = {
           col(theme,theme.colors.lekhakh[0],theme.colors.primary[0]),
 
           borderRadius:"0px",
-          border:params.variant === "outline" ? col(theme,"1px solid #FECC02","1px solid #E02020"):"none",
+          border:params.variant === "outline" ? col(theme,"1px solid #fff","1px solid #000000"):"none",
           
           color:
               params.variant === "filled" ? col(theme,"black","white") :
@@ -33,7 +33,8 @@ export const Button:ButtonProps = {
             color:params.variant === "filled" ? col(theme,theme.colors.primary[0],theme.colors.primary[7]):
             params.variant === "white" ? col(theme,theme.colors.lekhakh[0],theme.colors.secondary[0]):
             params.variant === "light" ? col(theme,theme.colors.lekhakh[0],theme.colors.secondary[0]):
-            "white" 
+            "white" ,
+            border:params.variant === "outline" ? col(theme,"1px solid #FECC02","1px solid #E02020"):"none",
           },
         },
 

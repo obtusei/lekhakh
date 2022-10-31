@@ -14,11 +14,6 @@ module.exports.createBlog = async (req,res) => {
               id: category.id
             }
           },
-          tag:{
-            create:[{
-              name:"Love"
-            }]
-          },
           user:{
             connect:{
               id:req.user.id
@@ -27,9 +22,14 @@ module.exports.createBlog = async (req,res) => {
         }
       }
     );
+    // const tag = await prisma.tag.createMany({
+    //   data:{
+
+    //   }
+    // })
     res.status(200).json(blog)
   }catch{
-    res.send("ERROR aayo")
+    res.status(404).send("ERROR")
   }
 }
 
@@ -155,7 +155,15 @@ module.exports.topBlog = async (req,res) => {
     res.status(200).send("ERROR")
   }
 }
-
+module.exports.allBlogs = async (req,res) => {
+  try{
+    const allBlogs = await prisma.blog.findMany();
+    res.status(200).json(allBlogs)
+  }
+  catch{
+    res.status(404).send("ERROR")
+  }
+}
 module.exports.discoverBlog = async (req,res) => {
   try{
     const discover = await prisma.category.findMany({

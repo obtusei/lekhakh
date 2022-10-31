@@ -1,21 +1,20 @@
+import axios from 'axios'
 import React from 'react'
-import useSWR, { mutate } from 'swr'
+import { mutate } from 'swr'
 import { Button, Divider, Group, Stack, Table, Text, Title } from 'ui'
 import SimpleCard from 'ui/components/Cards/SimpleCard'
-import { GetReports } from '../components/API'
+import { GetFeedbacks } from '../components/API'
 import Layout from '../components/Layout'
-import axios from "axios"
 
 type Props = {}
 
-function Reports({}: Props) {
-  
-  const {reports,isError} = GetReports()
+function Feedback({}: Props) {
+  const {feedbacks,isLoading} = GetFeedbacks() 
   const time = (tim:string) => new Date(tim);
-  const deleteReport = async (id:string) => {
+  const deleteFeedback = async (id:string) => {
     try{
       await axios.delete("/report",{data:{id:id}})
-      mutate("/report")
+      mutate("/feedback")
       
     }
     catch{
@@ -23,13 +22,12 @@ function Reports({}: Props) {
       
     }
   }
-
   return (
     <Layout>
-      <Title>Reports</Title>
+      <Title>Feedbacks</Title>
       <br />
       <Group>
-        <SimpleCard title='Total Reports' sub={reports ? reports.length:0}/>
+        <SimpleCard title='Total Feedbacks' sub={feedbacks ? feedbacks.length:0}/>
       </Group>
       <br />
       <Divider/>
@@ -46,29 +44,28 @@ function Reports({}: Props) {
         </thead>
         <tbody>
           {
-            reports ? reports.map((report:any,index:number) => (
+            feedbacks ? feedbacks.map((feedback:any,index:number) => (
               <tr key={index}>
                 <td>{index+1}</td>
                 <td>
                   <Stack spacing={0}>
-                    <Title order={4}>{report.title}</Title>
-                    <Text color={"dimmed"} lineClamp={2}>{report.message}</Text>
+                    <Title order={4}>{feedback.title}</Title>
+                    <Text color={"dimmed"} lineClamp={2}>{feedback.message}</Text>
                   </Stack>
                 </td>
                 <td>
                   <Stack spacing={0}>
-                    <Text>{report.name}</Text>
-                    <Text color={"dimmed"}>{report.email}</Text>
+                    <Text>{feedback.name}</Text>
+                    <Text color={"dimmed"}>{feedback.email}</Text>
                   </Stack>
                 </td>
-                <td>{time(report.postedAt).toLocaleString()}</td>
-                
+                <td>{time(feedback.postedAt).toLocaleString()}</td>
                 <td>
-                  <Button variant='subtle' onClick={() => deleteReport(report.id)}>Delete</Button>
+                  <Button variant='subtle' onClick={() => deleteFeedback(feedback.id)}>Delete</Button>
                 </td>
               </tr>
             )):
-            isError ? <tr>Error</tr>: <tr>Loading</tr>
+            isLoading ? <></>:<></>
           }
         </tbody>
       </Table>
@@ -76,4 +73,4 @@ function Reports({}: Props) {
   )
 }
 
-export default Reports
+export default Feedback

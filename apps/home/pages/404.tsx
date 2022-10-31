@@ -1,14 +1,16 @@
-import React from 'react'
+import useTranslation from 'next-translate/useTranslation'
+import { useRouter } from 'next/router'
 import { Button, Center, IconArrowLeft, Stack, Text, Title } from 'ui'
-import Layout from '../components/Layout'
 
 function ErrorPage() {
+  const {t} = useTranslation()
+  const router = useRouter()
   return (
     <Center style={{height:"100vh"}}>
       <Stack>
-        <Title>404</Title>
-        <Text color={"dimmed"}>The page you are looking for is not here</Text>
-        <Button leftIcon={<IconArrowLeft size={"20px"}/>}>Go Back</Button>
+        <Title>{t("other:404")}</Title>
+        <Text color={"dimmed"}>{t("other:notFound")}</Text>
+        <Button leftIcon={<IconArrowLeft size={"20px"}/>} onClick={() => router.back()}>{t("other:goBack")}</Button>
       </Stack>
     </Center>
   )

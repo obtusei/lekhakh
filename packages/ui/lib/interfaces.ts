@@ -36,7 +36,26 @@ export interface IBlog{
           viewCount:number,
           category:ICategory,
           user:IUser
-          tag:ITag[]
+          tag:ITag[],
+          likes:ILike[],
+          comments:any[]
+}
+
+export interface ILike{
+  id:string,
+  userId:string,
+  blogId:string
+}
+
+export interface IComment{
+  id:string,
+  text:string,
+  userId:string,
+  blogId:string,
+  createdAt:string
+  User?:IUser
+  blog?:IBlog
+
 }
 
 export interface ICategory{

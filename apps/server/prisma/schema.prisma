@@ -35,7 +35,7 @@ model User {
   username       String            @unique
   password       String
   createdAt      DateTime          @default(now())
-  bio            String?
+  bio            String?           @db.LongText
   image          String?
   blogs          Blog[]
   liked          Like[]
@@ -61,7 +61,7 @@ model Blog {
   id         String            @id @default(cuid())
   title      String
   category   Category          @relation(fields: [categoryId], references: [id])
-  content    String?
+  content    String?           @db.LongText
   createdAt  DateTime          @default(now())
   updatedAt  DateTime          @default(now())
   userId     String

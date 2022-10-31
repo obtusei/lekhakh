@@ -9,17 +9,18 @@ interface ShellProps {
   children: React.ReactNode;
   isNavHidden?: boolean;
   sideBardata: SideBarProps[];
-  navData?:NavData;
+  navData:NavData;
   session?:any,
   isLoading?:boolean,
+  isAdmin?:boolean
 }
 
-export function Shell({ children, isNavHidden,sideBardata,navData,session,isLoading}: ShellProps) {
+export function Shell({ children, isNavHidden,sideBardata,navData,session,isLoading,isAdmin}: ShellProps) {
   return (
     <AppShell
       navbarOffsetBreakpoint="sm"
       navbar={isNavHidden ? <></> : <SideBar data={sideBardata} />}
-      header={<Navbar navData={navData} session={session} isLoading={isLoading}/>}
+      header={<Navbar navData={navData} session={session} isLoading={isLoading} isAdmin={isAdmin}/>}
     >
 
       {children}

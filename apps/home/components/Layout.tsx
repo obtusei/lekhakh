@@ -5,7 +5,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { CategoryIcon, DiscoverIcon, FollowingIcon, HashtagIcon, SunIcon, TrendingIcon, WriterIcon } from 'ui/Icons';
 import useSWR from 'swr';
 import axios from 'axios';
-import { GetSession } from '../api/user';
+import { GetSession, GetTags } from '../api/user';
 import { getHotkeyHandler } from '@mantine/hooks';
 import { useRouter } from 'next/router';
 import TopAlert from 'ui/components/TopAlert';
@@ -13,7 +13,7 @@ import TopAlert from 'ui/components/TopAlert';
 function Layout({children,isNavHidden}:{children:React.ReactNode,isNavHidden?:boolean}) {
   const { t } = useTranslation();
   const {data:catData,error} = useSWR('/admin/categories',{ refreshInterval: 0 });
-  const {data:tagData,error:tagError} = useSWR('/admin/tags',{ refreshInterval: 0 });
+  const {tags:tagData,isError:tagError} = GetTags(7);
   const categories:{ label: string; link: string }[] = catData?.map(({name}:{name:string})=>({label:name,link:`/category/${name.toLowerCase()}`})) || [];
   const hashtags:{ label: string; link: string }[] = tagData?.map(({name}:{name:string})=>({label:name,link:`/tag/${name.toLowerCase()}`})) || [];
   const {session,isLoading} = GetSession();
@@ -54,10 +54,12 @@ function Layout({children,isNavHidden}:{children:React.ReactNode,isNavHidden?:bo
       'keydown',
       getHotkeyHandler([
         ['mod+D', () => router.push('/discover')],
-        ['mod+T', () => router.push('/trending')],
-        ['mod+F', () => router.push('/following')],
-        ['mod+W', () => router.push('/writers')],
+        ['alt+mod+V', () => router.push('/settings')],
+        ['alt+mod+T', () => router.push('/trending')],
+        ['alt+mod+F', () => router.push('/following')],
+        ['alt+mod+shift+R', () => router.push('/writers')],
         ['mod+J', () => toggleColorScheme()],
+        
       ])
     );
   })

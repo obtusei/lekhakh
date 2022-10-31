@@ -40,7 +40,6 @@ export interface RowData {
   email: string;
   emailVerified: boolean;
   isVerifiedUser:boolean;
-  isWriter:boolean;
 }
 
 export interface TableSortProps {
@@ -56,7 +55,6 @@ export const datum:TableSortProps= {
       email: "abhi@leftshape.com",
       emailVerified: true,
       isVerifiedUser:true,
-      isWriter:true
     }
   ]
 }
@@ -144,7 +142,6 @@ export default function TableSort({ data }: TableSortProps) {
       <td>{row.email}</td>
       <td>{row.emailVerified ? 'Yes' : 'No'}</td>
       <td>{row.isVerifiedUser ? 'Yes' : 'No'}</td>
-      <td>{row.isWriter ? 'Yes' : 'No'}</td>
     </tr>
   ));
 
@@ -190,13 +187,8 @@ export default function TableSort({ data }: TableSortProps) {
               Email Verified
             </th>
             <th>
-              Is Verified User
+              Verified
             </th>
-            <th>
-              Is Writer
-            </th>
-
-
           </tr>
         </thead>
         <tbody>

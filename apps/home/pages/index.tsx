@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { Divider, Stack, NavLink, Title, Group, Grid, Center, Text} from "ui";
-import BlogCard from "ui/components/Cards/BlogCard";
+import { Divider, Stack, NavLink, Title, Group, Grid, Center, Text, Input, Button, Paper, IconMail, showNotification} from "ui";
 import CustomChip from "ui/components/CustomChip";
 import Hero from "ui/components/Hero";
 import LowerMenu from "ui/components/LowerMenu";
@@ -13,12 +12,11 @@ import { ITag } from "ui/lib/interfaces";
 import { ErrorSection,LoadingSection } from "../components/ErrorAndLoading";
 import Card from "../components/Card";
 import axios from "axios";
-import safeJsonStringify from "safe-json-stringify";
+import { useState } from "react";
 
 export async function getServerSideProps () {
-  // `getStaticProps` is executed on the server side.
-  axios.defaults.withCredentials = true
   const res = await axios.get('/auth/info',{withCredentials:true})
+  
   const session = await res.data
   const headers = res.headers
   return {
@@ -29,7 +27,7 @@ export async function getServerSideProps () {
   }
 }
 
-export default function Web({user,headers}) {
+export default function Web({user}:any) {
   const {t} = useTranslation();
   const heroData = {
     title:[t('common:heroTitle'),t('common:heroTitle2')],
@@ -42,15 +40,14 @@ export default function Web({user,headers}) {
   const {session} = GetSession()
   const {trendData,isLoading:trendLoading} = GetTrendingBlogs();
   const {topData,isLoading:topLoading} = GetTopBlogs();
-  const {tags,isLoading:tagLoading} = GetTags()
-  
+  const {tags,isLoading:tagLoading} = GetTags(5)
+  const [ets,setEts] = useState("")
   return (
     <>
       <Layout isNavHidden={true}>
         
         {/* HERO SECTION */}
         <Hero {...data}/><br />
-        <Text>JSON:{JSON.stringify(user)}</Text>
         <Divider/><br />
 
         {/* TRENDING SECTION */}
@@ -63,7 +60,8 @@ export default function Web({user,headers}) {
             trendData ? trendData.map((trend,index) => (
               <Grid.Col span={4} key={index}>
                 {/* <BlogCard props={trend} session={session} isSmall={true} index={index}/>, */}
-                <Card blog={trend} isSmall={true} index={index}/>
+                
+                <Card blog={trend} isSmall={true} index={index+1}/>
               </Grid.Col>
             )):
             trendLoading ? <LoadingSection/>:<ErrorSection/>
@@ -99,7 +97,7 @@ export default function Web({user,headers}) {
             <Group spacing={15} mt={"10px"}>
             {
               tags ? tags.map((tag:ITag,index:number) => (
-                <CustomChip key={index} href={`/tag`} title={tag.name}/>
+                <CustomChip key={index} href={`/tag/${tag.name.toLocaleLowerCase()}`} title={tag.name}/>
               ))
               : tagLoading ? <LoadingSection/>:<ErrorSection/>
             }
@@ -111,6 +109,40 @@ export default function Web({user,headers}) {
         <br />
 
         {/* FOOTER SECTION */}
+        <Center>
+          <Paper shadow={"lg"} style={{padding:"20px"}} withBorder>
+            <Stack>
+            <Stack spacing={0}>
+              <Group spacing={3}>
+                <IconMail/>
+              <Title order={4}>{t("common:newsletter")}</Title>
+              </Group>
+              <Text color={"dimmed"}>{t("common:newsletterSub")}</Text>
+            </Stack>
+          <Group style={{width:"100%"}}>
+            <Input placeholder="example@example.com" type={"email"} value={ets} onChange={(e) => setEts(e.target.value)} style={{width:"70%"}}/>
+            <Button onClick={
+              () => {
+                axios.post("/newsletter",{email:ets},{withCredentials:true})
+                .then((res) => {
+                    showNotification({
+                      title: t("common:newsletterSuccess"),
+                      message: t("common:newsletterSuccessSub"),
+                    })                  
+                })
+                .catch((err) => {
+                  showNotification({
+                      title: t("common:newsletterFail"),
+                      message: t("common:newsletterFailSub"),
+                    })
+                })
+              }
+            }>{t("common:subscribe")}</Button>
+          </Group>
+          </Stack>
+          </Paper>
+        </Center>
+        <br />
         <Center>
           <LowerMenu/>
         </Center>

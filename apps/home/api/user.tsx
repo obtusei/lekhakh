@@ -80,7 +80,7 @@ export async function followSomeone(userData:IUser,doesFollow:any){
 // }
 
 export function GetSession () { 
-  const { data,error } = useSWR('/auth/info',fetcher)
+  const { data,error } = useSWR<{user:IUser}>('/auth/info',fetcher)
   return {
     session: data,
     isLoading: !error && !data,

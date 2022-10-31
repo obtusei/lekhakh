@@ -49,7 +49,7 @@ module.exports.likeABlog = async (req,res) => {
 
 module.exports.deleteALike = async (req,res) => {
   try{
-    const ifExist  = await prisma.like.findMany({
+    const deleteLike  = await prisma.like.deleteMany({
       where:{
         AND:[
           {
@@ -63,11 +63,6 @@ module.exports.deleteALike = async (req,res) => {
             }
           }
         ]
-      }
-    })
-    const deleteLike  = await prisma.like.delete({
-      where:{
-        id:ifExist[0].id
       }
     })
     res.status(200).json(deleteLike)
@@ -154,7 +149,7 @@ module.exports.saveABlog = async (req,res) => {
 
 module.exports.deleteASave = async (req,res) => {
   try{
-    const ifExist  = await prisma.savedBlogByUser.findMany({
+    const deleteSave  = await prisma.savedBlogByUser.deleteMany({
       where:{
         AND:[
           {
@@ -168,11 +163,6 @@ module.exports.deleteASave = async (req,res) => {
             }
           }
         ]
-      }
-    })
-    const deleteSave  = await prisma.savedBlogByUser.delete({
-      where:{
-        id:ifExist[0].id
       }
     })
     res.status(200).json(deleteSave)

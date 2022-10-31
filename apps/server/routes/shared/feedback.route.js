@@ -3,8 +3,14 @@ const prisma = require("../../prisma/prisma.js")
 
 feedback.get("/",async (req,res) => {
   try{
-    const newsletters = await prisma.findMany()
-    res.status(200).json(newsletters)
+    const feedbacks = await prisma.mailService.findMany({
+      where:{
+        type:{
+          equals:"FEEDBACK"
+        }
+      }
+    })
+    res.status(200).json(feedbacks)
   }
   catch{
     res.status(404).send("ERROR")
@@ -13,12 +19,16 @@ feedback.get("/",async (req,res) => {
 
 feedback.post("/",async (req,res) => {
   try{
-    const newsletter = await prisma.newsletter.create({
+    const feedback = await prisma.mailService.create({
       data:{
-        email:req.body.email
+        name:req.body.name,
+        email:req.body.email,
+        message:req.body.message,
+        title:req.body.title,
+        type:"FEEDBACK"
       }
     })
-    res.status(200).json(newsletter)
+    res.status(200).json(feedback)
   }
   catch{
     res.status(404).send("ERROR")
@@ -27,15 +37,15 @@ feedback.post("/",async (req,res) => {
 
 feedback.delete("/",async (req,res) => {
   try{
-    const newsletter = await prisma.newsletter.delete({
+    const report = await prisma.mailService.delete({
       where:{
         id:req.body.id
       }
     })
-    res.status(200).json(newsletter)
+    res.status(200).json(report)
   }
   catch{
-    res.status(404).send("ERROR")
+    res.status(404).send("Error deleting the feedback")
   }
 })
 

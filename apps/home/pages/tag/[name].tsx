@@ -1,11 +1,13 @@
 import axios from 'axios'
 import { GetStaticPaths, GetStaticProps } from 'next'
-import React from 'react'
 import { Divider, Grid, Text, Title } from 'ui'
 import { IBlog, ITag } from 'ui/lib/interfaces'
 import { GetSession } from '../../api/user'
 import Layout from '../../components/Layout'
 import Card from '../../components/Card'
+import useTranslation from 'next-translate/useTranslation'
+import EmptyContent from '../../components/EmptyContent'
+
 export const getStaticPaths:GetStaticPaths = async () =>{
   const response = await axios.get('/admin/tags')
   const tags = response.data
@@ -16,7 +18,7 @@ export const getStaticPaths:GetStaticPaths = async () =>{
   }))
   return {
     paths: paths,
-    fallback: false, // can also be true or 'blocking'
+    fallback: true, // can also be true or 'blocking'
   }
   
 }
@@ -33,20 +35,21 @@ export const getStaticProps: GetStaticProps = async (context) => {
 }
 
 function Tag({tag}:any) {
-  const {session} = GetSession()
+  const {t} = useTranslation()
   return (
     <Layout>
       <Title>#{tag.name}</Title>
-      <Text color={"dimmed"}>1200 blogs</Text>
+      <Text color={"dimmed"}>{t("other:nBlogs",{count:tag.blogs?.length})}</Text>
       <Divider/>
       <br />
       <Grid grow>
         {
-          tag.blogs.map((blog:IBlog,index:number) => (
+          tag.blogs.length != 0 ? tag.blogs.map((blog:IBlog,index:number) => (
             <Grid.Col span={4} key={index}>
               <Card blog={blog}/>
             </Grid.Col>
-          ))
+          )):
+          <EmptyContent/>
         }
       </Grid>
     </Layout>

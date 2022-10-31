@@ -44,25 +44,47 @@ category.get("/:name", async (req,res) => {
   }
 })
 
-category.post("/",async (req,res) => {
+const ifCategoryExist = async (req,res,next) => {
   try{
-    const newCategory = await prisma.category.create({
-      data:{
+    const category = await prisma.category.findUnique({
+      where:{
         name:req.body.name
       }
     })
-    res.status(200).send(newCategory)
+    if (category != null){
+      res.status(404).json({message:"Category already exist"})
+    }else{
+      next()
+    }
   }
   catch{
-    res.status(404).send("Can't create the new category")
+    res.status(404).json({message:"Error checking category"})
+  }
+}
+
+category.post("/",ifCategoryExist,async (req,res) => {
+  try{
+    if (req.body.name != " "){
+      const newCategory = await prisma.category.create({
+        data:{
+          name:req.body.name
+        }
+      })
+      res.status(200).send(newCategory)
+    }else{
+      res.send(404).json({message:"Can't create empty category"})
+    }
+  }
+  catch{
+    res.status(404).json({message:"Can't create the new category"})
   }
 })
 
-category.delete("/",async (req,res) => {
+category.delete("/:id",async (req,res) => {
   try{
     const deleteCategory = await prisma.category.delete({
       where:{
-        id:req.body.id
+        id:req.params.id
       }
     })
     res.status(200).send(deleteCategory)

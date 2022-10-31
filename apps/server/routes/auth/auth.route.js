@@ -1,15 +1,16 @@
 const auth = require('express').Router();
 const passport = require("passport");
-const {createUser} = require("../../controllers/user/user.controller");
+const {createUser, doesUsernameExist, checkIfUserExist, checkIfEmailExist} = require("../../controllers/user/user.controller");
 const prisma = require("../../prisma/prisma.js");
+const {doesUserNameExists,doesEmailExists} = require("../../controllers/auth/userNameEmailValidation.js")
 const {linkSession } = require("../../controllers/auth/auth.controller.js")
-auth.post("/register",createUser);
+auth.post("/register",checkIfUserExist,checkIfEmailExist,createUser);
 
 // auth.post('/login', passport.authenticate('local'));
 auth.post("/login", (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) throw err;
-    if (!user) res.send("No User Exists");
+    if (!user) res.status(404).json({incorrect:true});
     else {
       req.logIn(user, (err) => {
         if (err) throw err;
@@ -63,5 +64,25 @@ auth.get('/logout', function(req, res, next) {
   });
 });
 
+auth.put("/info",doesUserNameExists,doesEmailExists,async (req,res) => {
+    try{
+      const userUpdate = await prisma.user.update({
+        where:{
+          id:req.user.id
+        },
+        data:{
+          name:req.body.name,
+          username:req.body.username,
+          email:req.body.email,
+          bio:req.body.bio,
+          dateOfBirth:req.body.dob
+        }
+      })
+      res.status(200).json(userUpdate)
+    }
+    catch{
+      res.status(404).send("ERRO updating the user info")
+    }
+})
 
 module.exports = auth

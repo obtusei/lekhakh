@@ -34,7 +34,6 @@ function CreateBlog() {
   const [title,setTitle] = useState("")
   const [category,setCategory] = useState("")
   const [tags,setTags] = useState<string[]>([])
-  const [tag,setTag] = useState("")
   const {classes } = useStyles();
   const categories = GetCategories()
   const searctags = GetTags(10)
@@ -44,41 +43,40 @@ function CreateBlog() {
     <div>
       <Stack style={{justifyContent:'space-between',padding:"20px 20px 20px 40px"}}>
         <Group style={{justifyContent:'space-between'}}>
-        <Input placeholder='Enter the title'
+        <Input placeholder={t("other:enterTheTitle")}
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={(e:React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)}
         variant='unstyled' size='xl' style={{fontWeight:"bold"}}/>
           <Group>
-            <Button variant='white'>Cancel</Button>
+            <Button variant='white'>{t("common:cancel")}</Button>
             <Button onClick={
               async () => {
                 const data = {title,category,content,tags}
                 await createBlogByUser(data)
                 router.push("/")
               }
-            }>Publish</Button>
+            }>{t("other:publish")}</Button>
           </Group>
         </Group>
         <Group spacing={40} align="center">
         <NativeSelect
           data={categories.categories ? categories.categories.map((cat:any) => cat?.name):[]}
-          placeholder="Pick one"
-          label="Category"
+          placeholder={t("other:pickOne")}
+          label={t("common:category")}
           value={category}
           onChange={(e) => setCategory(e.target.value)}
         />
-        <Text>TAgs: {title}</Text>
         <MultiSelect
           data={searctags.tags ? searctags.tags.map((tag:ITag) => tag.name):[]}
-          label="Add Some Tags"
-          placeholder="Pick all that you like"
+          label={t("other:addSomeTags")}
+          placeholder="#blog"
           value={tags}
           onChange={(e) => setTags((arr) => [...e])}
           searchable
         />
         </Group>
-        
         </Stack>
+        
         <RichTextEditor
         value={content} 
         onChange={setContent}
@@ -89,7 +87,7 @@ function CreateBlog() {
           toolbar:classes.toolbar,
           root:classes.root
         }}
-        placeholder={t("Enter your blog content")}
+        placeholder={t("other:blogPlaceholder")}
         />
   </div>
   );

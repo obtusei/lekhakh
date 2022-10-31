@@ -25,7 +25,7 @@ function Login() {
   const {t} = useTranslation();
   const stringData:RegisterStringProps = {
     title:"Admin Login",
-    subTitle:"Only for application admins are allowed to login",
+    subTitle:"Only Admins are allowed to login",
     email:"Email",
     password:"Password",
     button:"Login",

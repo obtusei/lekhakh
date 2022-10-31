@@ -5,6 +5,8 @@
     "*": ["common","other","register"],
     "/register":["register"],
     "/login":["register"],
-    "/404":["register"]
+    "/404":["register"],
+    "/settings":["register"],
+    "/[username]":["common","other","register"]
   }
 }

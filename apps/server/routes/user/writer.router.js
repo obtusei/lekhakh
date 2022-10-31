@@ -104,6 +104,7 @@ writer.get("/category/:name",async (req,res) => {
         }
         
     })
+    
     res.json(users)
   }
   catch{

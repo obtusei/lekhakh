@@ -25,6 +25,7 @@ report.post("/",async (req,res) => {
         name:req.body.name,
         email:req.body.email,
         message:req.body.message,
+        title:req.body.title,
         type:"REPORT"
       }
     })

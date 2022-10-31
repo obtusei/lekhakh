@@ -7,16 +7,18 @@ export interface RegisterProps {
   onSubmit: (values: any) => void;
   loading: boolean;
   stringData:any
-  // doesEmailExist: (email:string) => boolean
+  inCorrect?:boolean
+  emailError?:boolean
+  usernameError?:boolean
 }
 
-export default function Register({ onSubmit,loading,stringData}: RegisterProps) {
+export default function Register({ onSubmit,loading,stringData,emailError,usernameError}: RegisterProps) {
   const form = useForm({
     initialValues: { name: '', email: '',username: '', password: '',confirmPassword: '' },
     validate: {
       name: (value) => (value.length < 2 ? stringData.nameRequired : null),
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : stringData.emailRequired),
-      username: (value) => (value.length < 2 ? stringData.usernameRequired :null),
+      email: (value) => (/^\S+@\S+$/.test(value) ? null : emailError ? stringData.emailExist:stringData.emailRequired),
+      username: (value) => (value.length < 2 ? stringData.usernameRequired :usernameError ? stringData.usernameExist: null),
       password: (value) => (value.length < 6 ? stringData.passwordRequired : null),
       confirmPassword: (value,values) => (value !== values.password ? stringData.confirmPasswordRequired : null),
     },

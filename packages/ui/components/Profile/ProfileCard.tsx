@@ -12,7 +12,7 @@ export interface UserProfileCardStringProps {
   follow: string
 }
 
-function ProfileCard({props,session,followers,followings,doesFollow,onFollowClick,stringData,hideBio}:{props:IUser,session:any,followers?:any,followings?:any,doesFollow?:any,onFollowClick:() => void,stringData:UserProfileCardStringProps,hideBio?:boolean}) {
+function ProfileCard({props,session,followers,followings,doesFollow,onFollowClick,stringData,hideBio,hideFollow}:{props:IUser,session:any,followers?:any,followings?:any,doesFollow?:any,onFollowClick:() => void,stringData:UserProfileCardStringProps,hideBio?:boolean,hideFollow?:Boolean}) {
   const [openFollower,setOpenFollower] = useState(false)
   const [openFollowing,setOpenFollowing] = useState(false)
   const router = useRouter()
@@ -29,7 +29,8 @@ function ProfileCard({props,session,followers,followings,doesFollow,onFollowClic
               <NavLink 
                 label={follower.follower.name} 
                 description={`@${follower.follower.username}`}
-                onClick={() => {
+                onClick={(e) => {
+                  e.preventDefault()
                   setOpenFollower(false)
                   router.push(`/${follower.follower.username}`)
                 }} 
@@ -50,7 +51,8 @@ function ProfileCard({props,session,followers,followings,doesFollow,onFollowClic
               <NavLink 
                 label={follow.following.name}
                 description={`@${follow.following.username}`} 
-                onClick={() => {
+                onClick={(e) => {
+                  e.preventDefault()
                   setOpenFollowing(false)
                   router.push(`/${follow.following.username}`)
                 }} 
@@ -61,7 +63,7 @@ function ProfileCard({props,session,followers,followings,doesFollow,onFollowClic
           }
       </Modal>
       <Stack style={{flexDirection:"row",alignItems:"center"}} spacing={20}>
-        <Avatar size="xl" src={ props.image != null ? ("http://localhost:3002" + props?.image):""} alt="User" radius={40} draggable={false}>{getInitial(props?.name)}</Avatar>
+        <Avatar size="xl" src={ props?.image != null ? ("http://localhost:3002" + props?.image):""} alt="User" radius={40} draggable={false}>{getInitial(props?.name)}</Avatar>
         <Stack align={"left"}>
           <Stack spacing={0}>
               <Title order={3}>{props?.name}</Title>
@@ -72,23 +74,25 @@ function ProfileCard({props,session,followers,followings,doesFollow,onFollowClic
               }
             </Group>
             {
-              hideBio ? "":<Text>{props?.bio}</Text>
+              hideBio ? "":<Text color={"dimmed"}>{props?.bio}</Text>
             }
             <Group>
               <Text><span style={{fontWeight:"bold"}}>{props?._count?.blogs}</span> {stringData.blogs}</Text>
               <UnstyledButton onClick={ () => {
                 setOpenFollower(true)
-              }} disabled={ props.username != session?.user?.username }>
+              }} disabled={ props?.username != session?.user?.username }>
                 <Text><span style={{fontWeight:"bold"}}>{props?._count?.followers}</span> {stringData.followers}</Text>
               </UnstyledButton>
               <UnstyledButton onClick={ () => {
                 setOpenFollowing(true)
-              }} disabled={ props.username != session?.user?.username }>
+              }} disabled={ props?.username != session?.user?.username }>
                 <Text><span style={{fontWeight:"bold"}}>{props?._count?.following}</span> {stringData.following}</Text>  
               </UnstyledButton>            
             </Group>
           </Stack>
-          <Group>
+          {
+            !hideFollow ?
+            <Group>
             {
               session?.user != null ? props.username != session?.user.username ? (
               !doesFollow?.doesFollow ? <Button variant='outline' onClick={() => onFollowClick()}>{stringData.follow}</Button>:
@@ -96,7 +100,8 @@ function ProfileCard({props,session,followers,followings,doesFollow,onFollowClic
               ):<></>
               :<Button variant='outline' onClick={() => onFollowClick()}>{stringData.follow}</Button>
             }
-          </Group>
+          </Group>:<></>
+          }
         </Stack>
       </Stack> <br />
                   

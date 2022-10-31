@@ -177,6 +177,16 @@ const savedBlogs = async (req,res) => {
                userId:{
                   equals:req.user.id
                }
+          },
+          select:{
+            blog:{
+              include:{
+                user:true,
+                category:true,
+                tag:true
+              }
+            }
+            
           }
     })
     if (!savedBlogs){
@@ -188,7 +198,42 @@ const savedBlogs = async (req,res) => {
     res.status(404).json({message:"Error connecting to server"})
   }
 }
+const checkIfUserExist = async (req,res,next) => {
+  try{
+    const user = await prisma.user.findUnique({
+      where:{
+        username:req.body.username
+      }
+    })
 
+    if (user == null){
+      next()
+    }else{
+      res.status(404).json({doesUsernameExist:true})
+    }
+  }
+  catch{
+    res.status(404).send("Error checking the username")
+  }
+}
+const checkIfEmailExist = async (req,res,next) => {
+  try{
+    const user = await prisma.user.findUnique({
+      where:{
+        email:req.body.email
+      }
+    })
+
+    if (user == null){
+      next()
+    }else{
+      res.status(404).json({doesEmailExist:true})
+    }
+  }
+  catch{
+    res.status(404).send("Error checking the email")
+  }
+}
 const createUser = async (req,res) => {
       try{
             const salt = await bcrypt.genSalt(10);
@@ -290,5 +335,7 @@ module.exports = {
       // editInfo
       searchUser,
       doesUsernameExist,
-      doesUserEmailExist
+      doesUserEmailExist,
+      checkIfUserExist,
+      checkIfEmailExist
 }
