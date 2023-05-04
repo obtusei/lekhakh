@@ -31,7 +31,7 @@ export default function Navbar({navData,session,isLoading,isAdmin}: {navData:Nav
                       if (e.key == "Enter"){
                         router.push(`/search?q=${search}`)
                       }
-                    }}  onChange={(e:React.KeyboardEvent<HTMLInputElement>) => setSearch(e.target.value)}/>
+                    }}  onChange={(e:React.ChangeEvent<HTMLInputElement>) => setSearch("e.target.value")}/>
                     </>:<></>
                     }
                   {/* </MediaQuery> */}

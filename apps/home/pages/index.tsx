@@ -120,7 +120,7 @@ export default function Web({user}:any) {
               <Text color={"dimmed"}>{t("common:newsletterSub")}</Text>
             </Stack>
           <Group style={{width:"100%"}}>
-            <Input placeholder="example@example.com" type={"email"} value={ets} onChange={(e) => setEts(e.target.value)} style={{width:"70%"}}/>
+            <Input placeholder="example@example.com" type={"email"} value={ets} onChange={(e:React.ChangeEvent<HTMLInputElement>) => setEts(e.target.value)} style={{width:"70%"}}/>
             <Button onClick={
               () => {
                 axios.post("/newsletter",{email:ets},{withCredentials:true})

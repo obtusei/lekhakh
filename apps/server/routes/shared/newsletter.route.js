@@ -11,6 +11,16 @@ newsletter.get("/",async (req,res) => {
   }
 })
 
+newsletter.get("/:id",async (req,res) => {
+  try{
+    const newsletters = await prisma.newsletter.findUnique({where:{id:req.params.id}})
+    res.status(200).json(newsletters)
+  }
+  catch{
+    res.status(404).send("ERROR")
+  }
+})
+
 newsletter.post("/",async (req,res) => {
   try{
     const newsletter = await prisma.newsletter.create({

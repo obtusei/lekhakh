@@ -29,7 +29,7 @@ function ProfileCard({props,session,followers,followings,doesFollow,onFollowClic
               <NavLink 
                 label={follower.follower.name} 
                 description={`@${follower.follower.username}`}
-                onClick={(e) => {
+                onClick={(e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
                   e.preventDefault()
                   setOpenFollower(false)
                   router.push(`/${follower.follower.username}`)
@@ -51,7 +51,7 @@ function ProfileCard({props,session,followers,followings,doesFollow,onFollowClic
               <NavLink 
                 label={follow.following.name}
                 description={`@${follow.following.username}`} 
-                onClick={(e) => {
+                onClick={(e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
                   e.preventDefault()
                   setOpenFollowing(false)
                   router.push(`/${follow.following.username}`)
