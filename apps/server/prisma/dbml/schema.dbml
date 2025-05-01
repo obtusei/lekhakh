@@ -129,11 +129,6 @@ Table MailService {
   type ServiceType [not null]
 }
 
-Table BlogToTag {
-  tagId String [ref: > Tag.id]
-  blogsId String [ref: > Blog.id]
-}
-
 Enum Role {
   ADMIN
   USER

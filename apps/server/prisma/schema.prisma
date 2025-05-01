@@ -1,6 +1,6 @@
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["fullTextSearch", "fullTextIndex"]
+  provider = "prisma-client-js"
+  // previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 generator dbml {
@@ -8,9 +8,10 @@ generator dbml {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = "mysql://root:bhatta123@localhost:3306/lekhakh_db?schema=public"
-  // provider = "postgresql"
+  // provider = "mysql"
+  // url      = "mysql://root:bhatta123@localhost:3306/lekhakh_db?schema=public"
+  provider = "postgres"
+  url      = "postgres://abhi:bhatta123@localhost:5432/lekhakh"
   // url      = "postgresql://abhi:AC06af9vlUaiKFhrd2QntQ@free-tier12.aws-ap-south-1.cockroachlabs.cloud:26257/defaultdb?sslmode=verify-full&options=--cluster%3Dlekhakh-956"
 }
 
@@ -35,7 +36,7 @@ model User {
   username       String            @unique
   password       String
   createdAt      DateTime          @default(now())
-  bio            String?           @db.LongText
+  bio            String?           @db.Text
   image          String?
   blogs          Blog[]
   liked          Like[]
@@ -61,7 +62,7 @@ model Blog {
   id         String            @id @default(cuid())
   title      String
   category   Category          @relation(fields: [categoryId], references: [id])
-  content    String?           @db.LongText
+  content    String?           @db.Text
   createdAt  DateTime          @default(now())
   updatedAt  DateTime          @default(now())
   userId     String
