@@ -11,7 +11,7 @@ datasource db {
   // provider = "mysql"
   // url      = "mysql://root:bhatta123@localhost:3306/lekhakh_db?schema=public"
   provider = "postgres"
-  url      = "postgres://abhi:bhatta123@localhost:5432/lekhakh"
+  url      = "postgres://postgres@localhost:5432/lekhakh"
   // url      = "postgresql://abhi:AC06af9vlUaiKFhrd2QntQ@free-tier12.aws-ap-south-1.cockroachlabs.cloud:26257/defaultdb?sslmode=verify-full&options=--cluster%3Dlekhakh-956"
 }
 
